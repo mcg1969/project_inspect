@@ -1,0 +1,2 @@
+include versioneer.py
+include project_inspect/_version.py

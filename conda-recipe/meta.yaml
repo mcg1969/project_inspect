@@ -1,0 +1,27 @@
+{% set data = load_setup_py_data() %}
+
+package:
+  name: project_inspect
+  version: {{ data.get('version') }}
+
+source:
+  path: ../
+
+build:
+  number: 0
+  noarch: python
+  script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
+
+requirements:
+  host:
+    - python=3.7
+    - setuptools
+  run:
+    - python=3.7
+    - pandas
+
+about:
+  home: https://github.com/Anaconda-Platform/project_inspect
+  license: BSD 3-Clause
+  license_file: LICENSE
+  summary: 'A utility package for inspecting Anaconda projects.'
