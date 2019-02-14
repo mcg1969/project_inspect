@@ -14,7 +14,7 @@ from .imports import find_python_imports, find_r_imports, find_file_imports
 import logging
 logger = logging.getLogger(__name__)
 
-__all__ = ['environment_by_prefix', 'environment_by_kernel_name']
+__all__ = ['environment_by_prefix', 'kernel_name_to_prefix']
 
 
 def get_python_builtins(pybin):
@@ -272,24 +272,20 @@ def environment_by_prefix(envdir, local=None):
 
 
 @functools.lru_cache()
-def environment_by_kernel_name(project_home, kernel_name, local):
+def kernel_name_to_prefix(project_home, kernel_name):
     parent_dir, project_name = os.path.split(project_home)
     project_root, project_user = os.path.split(parent_dir)
     if '-' not in kernel_name:
-        raise RuntimeError('Unexpected kernel: {}'.format(kernel_name))
+        return None
     kernel_loc, language = kernel_name.rsplit('-', 1)
     if kernel_loc == 'conda-root':
-        envdir = join(config.WAKARI_HOME, 'anaconda')
-        return environment_by_prefix(envdir, local)
+        return join(config.WAKARI_HOME, 'anaconda')
     kernel_base = 'conda-env-anaconda-'
     if kernel_loc.startswith('conda-env-anaconda-'):
-        envdir = join(config.WAKARI_HOME, 'anaconda', 'envs', kernel_loc[len(kernel_base):])
-        return environment_by_prefix(envdir, local)
+        return join(config.WAKARI_HOME, 'anaconda', 'envs', kernel_loc[len(kernel_base):])
     kernel_base = 'conda-env-{}-'.format(project_name)
     if kernel_loc.startswith(kernel_base):
-        envdir = join(project_home, 'envs', kernel_loc[len(kernel_base):])
-        return environment_by_prefix(envdir, local)
-    raise RuntimeError('Unexpected kernel: {}'.format(kernel_name))
+        return join(project_home, 'envs', kernel_loc[len(kernel_base):])
     
     
 def modules_to_packages(environment, modules, language):

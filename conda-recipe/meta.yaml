@@ -2,7 +2,7 @@
 
 package:
   name: project_inspect
-  version: {{ data.get('version') }}
+  version: {{ data.get('version').strip('v') }}
 
 source:
   path: ../

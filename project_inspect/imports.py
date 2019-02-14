@@ -130,4 +130,3 @@ def find_file_imports(fpath):
         return find_r_imports(data), 'r'
     else:
         raise RuntimeError('Unexpected file: {}'.format(fpath))
-        

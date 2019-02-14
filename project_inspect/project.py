@@ -1,5 +1,5 @@
 from . import config
-from .environments import environment_by_prefix, environment_by_kernel_name, modules_to_packages
+from .environments import environment_by_prefix, kernel_name_to_prefix, modules_to_packages
 from .imports import find_python_imports, find_r_imports
 
 from .utils import logger
@@ -34,13 +34,27 @@ def visible_project_environments(project_home):
     return envs
 
 
-def find_module_imports(fpath, prefixes):
+def find_notebook_metadata(fpath):
+    language = nbenv = None
+    fdir = dirname(fpath)
+    with open(fpath, 'r') as fp:
+        ndata = json.load(fp)
+    kspec = ndata['metadata']['kernelspec']
+    return kspec['language'].lower(), kspec['name']
+
+
+def find_file_imports(fpath, project_home, prefixes):
     if isdir(fpath) and exists(join(fpath, '__init__.py')):
         language = 'python'
     elif fpath.endswith('.py'):
         language = 'python'
     elif fpath.endswith('.R'):
         language = 'r'
+    elif fpath.endswith('.ipynb'):
+        language, kspec = find_notebook_metadata(fpath)
+        preferred = kernel_name_to_prefix(project_home, kspec)
+        if preferred is not None:
+            prefixes = [preferred]
     else:
         return (None, None, None)
     package_name = './' + basename(fpath)
@@ -86,47 +100,22 @@ def sort_candidates(depends):
     return heads + list(edges) + tails[::-1]
 
 
-def find_notebook_imports(fpath, project_home, env_prefix=None):
-    language = nbenv = None
-    fdir = dirname(fpath)
-    with open(fpath, 'r') as fp:
-        ndata = json.load(fp)
-    kspec = ndata['metadata']['kernelspec']
-    nbenv = kspec['name'].rsplit('-', 1)[0]
-    language = kspec['language'].lower()
-    if env_prefix is None:
-        environment = environment_by_kernel_name(project_home, kspec['name'], fdir)
-    else:
-        environment = environment_by_prefix(env_prefix, fdir)
-    file_modules = set(['ipykernel' if language == 'python' else 'IRkernel'])
-    for cell in ndata['cells']:
-        if cell['cell_type'] == 'code':
-            if language == 'python':
-                source = '\n'.join(c for c in cell['source'] if not c.startswith('%'))
-                processor = find_python_imports
-            elif language == 'r':
-                source = '\n'.join(cell['source'])
-                processor = find_r_imports
-            else:
-                raise RuntimeError('Unsupported language: {}'.format(language))
-            file_modules.update(processor(source))
-    requested, missing = modules_to_packages(environment, file_modules, language)
-    return (environment['prefix'], language, requested, missing)
-
-
 def find_project_imports(project_home):
     project_name = basename(project_home)
     project_user = basename(dirname(project_home))
+    project_envs = join(project_home, 'envs', '')
     logger.info('Scanning project: {}/{}'.format(project_user, project_name))
+    
+    all_envs = {}
+    for prefix, shortname in visible_project_environments(project_home):
+        all_envs[prefix] = {
+            'shortname': shortname, 
+            'requested': set(), 
+            'missing': {}}
 
-    requested = {}
-    missing = {}
-    all_envs = visible_project_environments(project_home)
-    short_names = {prefix: name for prefix, name in all_envs}
-    all_envs = [prefix for prefix, _ in all_envs]
     logger.info('  {} visible environments:'.format(len(all_envs)))
-    for env in all_envs:
-        logger.info('    {}: {}'.format(short_names[env], env))
+    for prefix, envrec in all_envs.items():
+        logger.info('    {}: {}'.format(envrec['shortname'], prefix))
 
     wrapper = TextWrapper()
     wrapper.initial_indent = '    '
@@ -150,15 +139,13 @@ def find_project_imports(project_home):
         fbase = fpath[root_len:]
         local_imports = set()
         env_imports = set()
+        envrec = all_envs[env_prefix]
         for pkg in file_requests:
             (local_imports if pkg.startswith('./') else env_imports).add(pkg)
-        envname = short_names[env_prefix]
-        logger.info('  {}: {}, environment: {}'.format(fbase, language, envname))
+        logger.info('  {}: {}, environment: {}'.format(fbase, language, envrec['shortname']))
         if env_imports:
             logger.info(_wrap('packages: {}'.format(', '.join(sorted(env_imports)))))
-            if env_prefix not in requested:
-                requested[env_prefix] = set()
-            requested[env_prefix].update(env_imports)
+            envrec['requested'].update(env_imports)
         if local_imports:
             local_imports = sorted(pkg[2:] for pkg in local_imports)
             logger.info(_wrap('local imports: {}'.format(', '.join(local_imports))))
@@ -166,11 +153,7 @@ def find_project_imports(project_home):
                 _touch(pkg, env_prefix)
         if file_missing:
             logger.info(_wrap('unresolved: {}'.format(', '.join(sorted(file_missing)))))
-            if env_prefix not in missing:
-                missing[env_prefix] = {}
-            if language not in missing[env_prefix]:
-                missing[env_prefix][language] = set()
-            missing[env_prefix][language].update(file_missing)
+            envrec['missing'].setdefault(language, set()).update(file_missing)
             
     root_len = len(project_home.rstrip('/')) + 1
     for root, dirs, files in os.walk(project_home, topdown=True):
@@ -189,23 +172,20 @@ def find_project_imports(project_home):
         for file in scan_targets:
             visited.add(file)
             fpath = join(root, file)
-            if file.endswith('.ipynb'):
-                env_prefix, language, t_requests, t_missing = find_notebook_imports(fpath, project_home)
-            else:
-                envs = local_envs.get(file) or all_envs
-                env_prefix, language, t_requests, t_missing = find_module_imports(fpath, envs)
+            envs = local_envs.get(file) or all_envs
+            env_prefix, language, t_requests, t_missing = find_file_imports(fpath, project_home, envs)
             _process(fpath, env_prefix, language, t_requests, t_missing)
             
-    if requested:
-        logger.info('  Summary:')
-        for envname, requests in requested.items():
-            logger.info('    {}'.format(envname))
-            logger.info(_wrap('packages: {}'.format(', '.join(sorted(requests)))))
-            if envname in missing:
-                for language, mset in missing[envname].items():
-                    logger.info(_wrap('missing {} imports: {}'.format(language, ', '.join(sorted(mset)))))
+    if any(envrec['requested'] or envrec['missing'] for envrec in all_envs.values()):
+        logger.info('Summary:')
+        for prefix, envrec in all_envs.items():
+            if envrec['requested']:
+                logger.info('  {} ({}):'.format(envrec['shortname'], prefix))
+                logger.info(_wrap('packages: {}'.format(', '.join(sorted(envrec['requested'])))))
+            for language, mset in envrec['missing'].items():
+                logger.info(_wrap('missing {} imports: {}'.format(language, ', '.join(sorted(mset)))))
             
-    return requested, missing
+    return all_envs
 
 
 def all_children(packages, children, field, filter=None):
@@ -222,15 +202,14 @@ def all_children(packages, children, field, filter=None):
 
 
 def build_project_inventory(project_home):
-    snames = dict(visible_project_environments(project_home))
-    project_name = basename(project_home)
-    project_user = basename(dirname(project_home))
-    requested, _ = find_project_imports(project_home)
+    project_envs = join(project_home, 'envs', '')
+    all_envs = find_project_imports(project_home)
     records = []
-    for envname, imported in requested.items():
-        if not imported:
+    for prefix, envrec in all_envs.items():
+        imported = envrec['requested']
+        if not imported and not prefix.startswith(project_envs):
             continue
-        envdata = environment_by_prefix(envname)
+        envdata = environment_by_prefix(prefix)
         packages = envdata.get('packages', {})
         required = imported.copy()
         while True:
@@ -244,7 +223,7 @@ def build_project_inventory(project_home):
         for base in required.intersection(('r-base', 'python')):
             imported.add(base)
             bases[base] = all_children(packages, packages[base]['reverse'], 'reverse')
-        envname = snames[envname]
+        envname = envrec['shortname']
         extra = set(packages) - required
         required -= imported
         for pkg in sorted(imported):
@@ -293,5 +272,3 @@ def build_node_inventory(project_home=None):
             df.append(t_df)
     df = pd.concat(df) if df else None
     return df
-
-    
