@@ -1,0 +1,3 @@
+#!/bin/sh
+conda create --prefix envs/default python=2.7 _license anaconda anaconda-project astropy basemap bcolz beautiful-soup bitarray blaze boto bottleneck cdecimal chardet cheetah cloog colorama conda-verify cvxopt cython dateutil dbus distributed dropbox dynd-python fastcache filelock gdal gevent glob2 googlecl grin gst-plugins-base holoviews ipyparallel jedi jupyter libtool lxml markdown mkl-service mpc navigator-updater nltk nose numpydoc openpyxl pep8 pip pkginfo ply psycopg2 pycosat pycrypto pycurl pyflakes pylint pyodbc pyopenssl qtawesome r-essentials rope scikit-image scikit-learn seaborn shapely statsmodels sympy twisted unicodecsv xlrd xlsxwriter xlwt
+conda run --prefix envs/default pip install ruamel.yaml

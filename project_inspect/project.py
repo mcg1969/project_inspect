@@ -64,13 +64,12 @@ def find_file_imports(fpath, project_home, prefixes):
         environment = environment_by_prefix(prefix, fdir)
         modules = environment['packages'][package_name]['imports'][language]
         requested, missing = modules_to_packages(environment, modules, language)
-        candidate = (prefix, language, requested, missing)
-        nmissing = len(candidate)
-        if best is None or nmissing < len(best[3]):
+        candidate = (prefix, language, requested, missing, len(missing))
+        if best is None or candidate[-1] < best[-1]:
             best = candidate
-        if nmissing == 0:
+        if best[-1] == 0:
             break
-    return best
+    return best[:-1]
 
 
 def sort_candidates(depends):
@@ -116,6 +115,13 @@ def find_project_imports(project_home):
     logger.info('  {} visible environments:'.format(len(all_envs)))
     for prefix, envrec in all_envs.items():
         logger.info('    {}: {}'.format(envrec['shortname'], prefix))
+    if not all_envs:
+        logger.info('    no project environments!')
+        all_envs['@'] = {
+            'shortname': '<empty>',
+            'requested': set(),
+            'missing': {}
+        }
 
     wrapper = TextWrapper()
     wrapper.initial_indent = '    '
@@ -197,7 +203,7 @@ def all_children(packages, children, field, filter=None):
             if filter is None or pkg not in filter: 
                 result.update(packages.get(pkg, {}).get(field, ()))
     if filter is not None:
-        result &= filter
+        result.intersection_update(filter)
     return result
 
 
@@ -234,7 +240,9 @@ def build_project_inventory(project_home):
             # If a package depends on another package transitively through one of the base
             # packages (python, r-base), we don't want it to show up in this list. This
             # reduces the noise in this list considerably.
-            revs = all_children(packages, pdata['reverse'], 'reverse', imported)
+            revs = all_children(packages, pdata['reverse'], 'reverse', bases)
+            if not revs:
+                revs = all_children(packages, pdata['reverse'], 'reverse', imported)
             revs = ', '.join(sorted(revs))
             records.append((envname, pkg, pdata['version'], pdata['build'], True, False, revs))
         for pkg in sorted(extra):
@@ -251,7 +259,7 @@ def build_user_inventory(username):
     else:
         user_home = join(config.PROJECT_HOME, username)
     df = []
-    for projectrc in glob(join(user_home, '*', '.projectrc')):
+    for projectrc in sorted(glob(join(user_home, '*', '.projectrc'))):
         project_home = dirname(projectrc)
         t_df = build_project_inventory(project_home)
         if t_df is not None:
@@ -265,7 +273,7 @@ def build_node_inventory(project_home=None):
     if project_home is None:
         project_home = config.PROJECT_HOME
     df = []
-    for user_home in glob(join(project_home, '*')):
+    for user_home in sorted(glob(join(project_home, '*'))):
         t_df = build_user_inventory(user_home)
         if t_df is not None:
             t_df.insert(0, 'user', basename(user_home))

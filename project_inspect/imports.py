@@ -117,16 +117,23 @@ def find_notebook_imports(nbdata):
     return modules, language
 
 
-def find_file_imports(fpath):
+def find_file_imports(fpath, submodules=False, locals=False):
     if not isfile(fpath):
         raise RuntimeError('Not a file: {}'.format(fpath))
     with open(fpath, 'rt') as fp:
         data = fp.read()
     if fpath.endswith('.ipynb'):
-        return find_notebook_imports(data)
+        imports, language = find_notebook_imports(data)
     elif fpath.endswith('.py'):
-        return find_python_imports(data), 'python'
+        imports, language = find_python_imports(data), 'python'
     elif fpath.endswith('.R'):
-        return find_r_imports(data), 'r'
+        imports, language = find_r_imports(data), 'r'
     else:
         raise RuntimeError('Unexpected file: {}'.format(fpath))
+    if language == 'python':
+        if not submodules:
+            imports = set('.' if imp.startswith('.') else imp.split('.', 1)[0] for imp in imports)
+        if not locals:
+            imports = set(imp for imp in imports if not imp.startswith('.'))
+    return imports, language
+

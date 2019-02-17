@@ -44,7 +44,7 @@ def get_python_builtins(pybin):
 def parse_egg_info(path):
     '''
     Returns the name, version, and key file list for a pip package.
-    
+
     Args:
         path (str): path to the egg file or directory
     Returns:
@@ -54,17 +54,28 @@ def parse_egg_info(path):
             manifest file (SOURCES.txt, RECORD), if such a file is found.
             If the manifest is not found, an empty list is returned.
     '''
-    name, version, _ = basename(path).rsplit('.', 1)[0].rsplit('-', 2)
+    name, version = basename(path).rsplit('.', 1)[0].rsplit('-', 2)[:2]
     pdata = {'name': name.lower(),
              'version': version,
              'build': '<pip>',
              'depends': set(),
              'modules': {'python': set(), 'r': set()}}
     if path.endswith('.egg'):
-        pdata['modules']['python'] = get_python_importables(path)
+        pdata['modules']['python'].update(get_python_importables(path))
         path = join(path, 'EGG-INFO')
     else:
-        pdata['modules']['python'] = get_python_importables(path.rsplit('.', 1)[0], level=1)
+        spdir = dirname(path)
+        tops = [name]
+        tname = name.split('.', 1)[0]
+        tlpath = join(path, 'top_level.txt')
+        if exists(tlpath):
+            with open(tlpath, encoding='utf-8', errors='ignore') as fp:
+                tops.extend(line for line in map(str.rstrip, fp) if line and line != tname)
+        for top in tops:
+            mparts = top.split('.')
+            level = len(mparts)
+            mpath = join(spdir, *mparts)
+            pdata['modules']['python'].update(get_python_importables(mpath, level=level))
     fname = 'METADATA' if path.endswith('.dist-info') else 'PKG-INFO'
     fpath = join(path, fname)
     info = {}
@@ -78,7 +89,7 @@ def parse_egg_info(path):
     if 'Requires-Dist' in info:
         pdata['depends'].update(x.split(' ', 1)[0].lower() for x in info['requires-dist'])
     else:
-        req_txt = join(dirname(path2), 'requires.txt')
+        req_txt = join(path, 'requires.txt')
         if exists(req_txt):
             for dep in open(req_txt, 'rt'):
                 m = re.match(r'^([\w_-]+)', dep)
@@ -111,8 +122,13 @@ def parse_conda_meta(mpath):
                     continue
             if stub.endswith('__init__.py'):
                 py_modules.add(dirname(stub).replace('/', '.'))
-            elif stub.endswith(('.py', '.so')):
+            elif stub.endswith('.py'):
                 py_modules.add(stub.rsplit('.', 1)[0].replace('/', '.'))
+            elif stub.endswith('.so'):
+                parts = stub.split('.')[:-1]
+                if parts[-1].startswith('cpython-'):
+                    parts = parts[:-1]
+                py_modules.add('.'.join(parts).replace('/', '.'))
         m1 = re.match(r'lib/R/library/([^/]*)/', fpath)
         if m1:
             stub = m1.groups()[0]
@@ -146,32 +162,40 @@ def get_eggs(sp_dir):
 
 @functools.lru_cache()
 def get_python_importables(path, level=0):
+    gen = ()
     modules = {}
+    if isdir(path):
+        gen = os.walk(path, followlinks=True)
+    elif level > 0:
+        for sfx in ('.py', '.so'):
+            if isfile(path + sfx):
+                gen = [(dirname(path), [], [basename(path) + sfx])]
+                path = dirname(path)
+                level -= 1
     root_path = path.rstrip('/')
     while level > 0:
         root_path = dirname(root_path)
+        level -= 1
     root_len = len(root_path) + 1
-    for root, dirs, files in os.walk(path):
+    for root, dirs, files in gen:
         dirs[:] = [d for d in dirs if not d.startswith('.')
                    and exists(join(root, d, '__init__.py'))]
         base_module = root[root_len:].replace('/', '.')
         for file in files:
             if file.startswith('.'):
                 continue
-            elif file.endswith('.pth'):
-                fpath = join(root, file)
+            fpath = join(root, file)
+            if file.endswith('.pth'):
                 with open(fpath, 'rt') as fp:
                     for npath in fp:
                         npath = abspath(join(root, npath.strip()))
                         modules.update(get_python_importables(npath))
+            elif file == '__init__.py':
+                modules[base_module] = fpath
             elif file.endswith(('.so', '.py')):
-                fpath = join(root, file)
-                if file == '__init__.py':
-                    file = base_module
-                else:
-                    file = file.rsplit('.', 1)[0]
-                    if base_module:
-                        file = base_module + '.' + file
+                file = file.rsplit('.', 1)[0]
+                if base_module:
+                    file = base_module + '.' + file
                 modules[file] = fpath
     return modules
 
@@ -188,18 +212,24 @@ def get_local_packages(path):
                                'imports': {'python': set(), 'r': set()}}
         return packages[bname]
     for module, fpath in get_python_importables(path).items():
+        if not os.access(fpath, os.R_OK):
+            logger.error('CANNOT READ: {}'.format(fpath))
+            continue
         bname = './' + module.split('.', 1)[0]
         if exists(join(path, bname) + '.py'):
             bname += '.py'
         pdata = _create(bname)
-        imports, _ = find_file_imports(fpath)
+        imports, _ = find_file_imports(fpath, submodules=True)
         pdata['modules']['python'].add(module)
-        pdata['imports']['python'].update(imp for imp in imports if not imp.startswith('.'))
+        pdata['imports']['python'].update(imports)
     for fpath in glob(join(path, '*.R')) + glob(join(path, '*.ipynb')):
         if not basename(fpath).startswith('.'):
+            if not os.access(fpath, os.R_OK):
+                logger.error('CANNOT READ: {}'.format(fpath))
+                continue
             bname = './' + basename(fpath)
             pdata = _create(bname)
-            imports, language = find_file_imports(fpath)
+            imports, language = find_file_imports(fpath, submodules=True)
             pdata['imports'][language] = imports
     return packages
 
@@ -252,7 +282,7 @@ def environment_by_prefix(envdir, local=None):
         eggfiles = get_eggs(spdir)
     for pdata in packages.values():
         eggfiles -= pdata['eggs']
-    for eggfile in (): # eggfiles:
+    for eggfile in eggfiles:
         pdata = parse_egg_info(join(spdir, eggfile))
         pname = pdata['name']
         packages[pdata['name']] = pdata
@@ -292,7 +322,12 @@ def modules_to_packages(environment, modules, language):
     requested = set()
     missing = set()
     packages = environment['imports'][language]
-    for module in modules:
+    # Make sure we get the package that imports the base language
+    if language == 'python':
+        lang_modules = ['math']
+    else:
+        lang_modules = ['stats']
+    for module in list(modules) + lang_modules:
         package = packages.get(module)
         while package is None and '.' in module:
             module = module.rsplit('.', 1)[0]

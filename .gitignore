@@ -63,3 +63,8 @@ screenshots/
 # npm
 package-lock.json
 
+# test_node environments
+envs/
+*.lock
+*.swp
+
