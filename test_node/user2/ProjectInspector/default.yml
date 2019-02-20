@@ -7,3 +7,5 @@ dependencies:
 - notebook
 - r-irkernel
 - toolz
+- nomkl
+

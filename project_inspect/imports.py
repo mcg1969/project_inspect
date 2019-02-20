@@ -8,9 +8,9 @@ from os.path import join, basename, dirname, exists, isfile
 
 from lib2to3 import pygram
 from lib2to3 import pytree
-from lib2to3.pgen2 import driver
-from lib2to3.pgen2 import parse
-from lib2to3.pgen2 import token
+from lib2to3.pgen2 import driver, parse, token
+from lib2to3.pgen2.parse import ParseError
+from lib2to3.pgen2.tokenize import TokenError
 from lib2to3.pygram import python_symbols as syms
 from lib2to3.pytree import Leaf, Node
 
@@ -61,28 +61,29 @@ def find_python_imports(code):
     try:
         tree = p3_driver.parse_string(code, debug=False)
         return set(yield_imports(tree))
-    except parse.ParseError:
+    except (ParseError, TokenError):
         pass
     p2_grammar = pygram.python_grammar
     p2_driver = driver.Driver(p2_grammar, convert=pytree.convert)
     try:
         tree = p2_driver.parse_string(code, debug=False)
         return set(yield_imports(tree))
-    except parse.ParseError:
+    except (ParseError, TokenError):
         pass
-    for line in code.splitlines():
-        imports = set()
-        try:
-            tree = p3_driver.parse_string(line + '\n', debug=False)
-            imports.update(yield_imports(tree))
-        except parse.ParseError:
-            pass
+    imports = set()
+    for line in map(str.strip, code.splitlines()):
+        if not line.startswith('#'):
+            try:
+                tree = p3_driver.parse_string(line + '\n', debug=False)
+                imports.update(yield_imports(tree))
+            except (ParseError, TokenError):
+                pass
     return imports
 
 
 R_PKGNAME = r'[a-zA-Z][a-zA-Z0-9.]*[a-zA-Z0-9]'
-LIB_MATCH = r'library\s*\(\s*[''"]?(' + R_PKGNAME + r')[''"]?\s*\)'
-COLON_MATCH = r'.*?(' + R_PKGNAME + ')\s*::\s*[a-zA-Z]'
+LIB_MATCH = (r'library\s*\(\s*["{0}]?(' + R_PKGNAME + r')["{0}]?\s*\)').format("'")
+COLON_MATCH = r'.*?(' + R_PKGNAME + r')\s*::\s*[a-zA-Z]'
 EITHER_MATCH = LIB_MATCH + r'|' + COLON_MATCH
 
 
@@ -91,16 +92,29 @@ def find_r_imports(code):
     if not isinstance(code, list):
         code = code.splitlines()
     for line in code:
-        if not re.match('\s*#', line):
+        if not re.match(r'\s*#', line):
             for match in re.findall(EITHER_MATCH, line):
                 modules.update(match)
         modules.discard('')
     return modules
 
 
+def strip_python_magic(cell):
+    for c in cell:
+        cstrip = c.lstrip()
+        if cstrip.startswith('%'):
+            if not cstrip.startswith('%%') and ' ' in cstrip:
+                yield cstrip.split(' ', 1)[1]
+        else:
+            yield c
+
+
 def find_notebook_imports(nbdata):
     ndata = json.loads(nbdata)
-    language = ndata['metadata']['kernelspec']['language'].lower()
+    try:
+        language = ndata['metadata']['kernelspec']['language'].lower()
+    except KeyError:
+        return set(), 'python'
     if language not in ('python', 'r'):
         raise RuntimeError('Unsupported language: {}'.format(language))
     modules = set()
@@ -108,7 +122,7 @@ def find_notebook_imports(nbdata):
     for cell in ndata['cells']:
         if cell['cell_type'] == 'code':
             if language == 'python':
-                source = '\n'.join(c for c in cell['source'] if not c.startswith('%'))
+                source = '\n'.join(strip_python_magic(cell['source']))
                 processor = find_python_imports
             elif language == 'r':
                 source = '\n'.join(cell['source'])
@@ -120,16 +134,16 @@ def find_notebook_imports(nbdata):
 def find_file_imports(fpath, submodules=False, locals=False):
     if not isfile(fpath):
         raise RuntimeError('Not a file: {}'.format(fpath))
+    if not fpath.endswith(('.ipynb', '.py', '.R')):
+        return set(), None
     with open(fpath, 'rt') as fp:
         data = fp.read()
     if fpath.endswith('.ipynb'):
         imports, language = find_notebook_imports(data)
     elif fpath.endswith('.py'):
         imports, language = find_python_imports(data), 'python'
-    elif fpath.endswith('.R'):
+    else: # .R
         imports, language = find_r_imports(data), 'r'
-    else:
-        raise RuntimeError('Unexpected file: {}'.format(fpath))
     if language == 'python':
         if not submodules:
             imports = set('.' if imp.startswith('.') else imp.split('.', 1)[0] for imp in imports)

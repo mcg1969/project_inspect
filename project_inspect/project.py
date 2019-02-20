@@ -39,11 +39,14 @@ def find_notebook_metadata(fpath):
     fdir = dirname(fpath)
     with open(fpath, 'r') as fp:
         ndata = json.load(fp)
-    kspec = ndata['metadata']['kernelspec']
+    try:
+        kspec = ndata['metadata']['kernelspec']
+    except KeyError:
+        return None, None
     return kspec['language'].lower(), kspec['name']
 
 
-def find_file_imports(fpath, project_home, prefixes):
+def find_used_packages(fpath, project_home, prefixes):
     if isdir(fpath) and exists(join(fpath, '__init__.py')):
         language = 'python'
     elif fpath.endswith('.py'):
@@ -52,11 +55,13 @@ def find_file_imports(fpath, project_home, prefixes):
         language = 'r'
     elif fpath.endswith('.ipynb'):
         language, kspec = find_notebook_metadata(fpath)
+        if language is None:
+            return (None, None, None, None)
         preferred = kernel_name_to_prefix(project_home, kspec)
         if preferred is not None:
             prefixes = [preferred]
     else:
-        return (None, None, None)
+        return (None, None, None, None)
     package_name = './' + basename(fpath)
     fdir = dirname(fpath)
     best = None
@@ -143,6 +148,9 @@ def find_project_imports(project_home):
     def _process(fpath, env_prefix, language, file_requests, file_missing):
         fdir = dirname(fpath)
         fbase = fpath[root_len:]
+        if env_prefix is None:
+            logger.info('  {}: empty notebook'.format(fbase))
+            return
         local_imports = set()
         env_imports = set()
         envrec = all_envs[env_prefix]
@@ -167,7 +175,7 @@ def find_project_imports(project_home):
         # or the "envs" or "examples" directories
         dirs[:] = [file for file in dirs if not file.startswith('.')
                    and not exists(join(root, file, '__init__.py'))
-                   and (root != project_home or file not in ('envs', 'examples'))]
+                   and (root != project_home or file not in ('envs', 'pkgs', 'examples'))]
         
         local_depends.clear()
         for pkg, pdata in environment_by_prefix('@', root)['packages'].items():
@@ -179,7 +187,7 @@ def find_project_imports(project_home):
             visited.add(file)
             fpath = join(root, file)
             envs = local_envs.get(file) or all_envs
-            env_prefix, language, t_requests, t_missing = find_file_imports(fpath, project_home, envs)
+            env_prefix, language, t_requests, t_missing = find_used_packages(fpath, project_home, envs)
             _process(fpath, env_prefix, language, t_requests, t_missing)
             
     if any(envrec['requested'] or envrec['missing'] for envrec in all_envs.values()):
@@ -275,7 +283,13 @@ def build_user_inventory(username):
         t_df = build_project_inventory(project_home)
         t_df.insert(0, 'project', basename(project_home))
         df.append(t_df)
-    return pd.concat(df)
+    if df:
+        df = pd.concat(df)
+    else:
+        df = pd.DataFrame.from_records(columns=('project',) + COLUMNS)
+        df['required'] = df['required'].astype('bool')
+        df['requested'] = df['requested'].astype('bool')
+    return df
 
 
 def build_node_inventory(project_home=None):
@@ -287,4 +301,10 @@ def build_node_inventory(project_home=None):
             t_df = build_user_inventory(user_home)
             t_df.insert(0, 'user', basename(user_home))
             df.append(t_df)
-    return pd.concat(df)
+    if df:
+        df = pd.concat(df)
+    else:
+        df = pd.DataFrame.from_records(columns=('user', 'project',) + COLUMNS)
+        df['required'] = df['required'].astype('bool')
+        df['requested'] = df['requested'].astype('bool')
+    return df
