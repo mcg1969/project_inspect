@@ -68,3 +68,6 @@ envs/
 *.lock
 *.swp
 
+# We need to do this because the chmod test makes git think it
+# needs to update the file.
+cannot_read.py
