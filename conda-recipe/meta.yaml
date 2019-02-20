@@ -20,6 +20,13 @@ requirements:
     - python=3.7
     - pandas
 
+test:
+  source_files:
+    - test_node
+    - tests
+  requires:
+    - pytest
+
 about:
   home: https://github.com/Anaconda-Platform/project_inspect
   license: BSD 3-Clause

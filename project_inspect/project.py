@@ -207,7 +207,16 @@ def all_children(packages, children, field, filter=None):
     return result
 
 
-def build_project_inventory(project_home):
+COLUMNS = ('env', 'package', 'version', 'build', 'required', 'requested', 'required_by')
+
+
+def build_project_inventory(username, project=None):
+    if '/' in username:
+        project_home = abspath(username)
+    elif project is None:
+        raise RuntimeError('The name of the project is missing')
+    else:
+        project_home = join(config.PROJECT_HOME, username, project)
     project_envs = join(project_home, 'envs', '')
     all_envs = find_project_imports(project_home)
     records = []
@@ -248,7 +257,9 @@ def build_project_inventory(project_home):
         for pkg in sorted(extra):
             pdata = packages[pkg]
             records.append((envname, pkg, pdata['version'], pdata['build'], False, False, ''))
-    df = pd.DataFrame.from_records(records, columns=('env', 'package', 'version', 'build', 'required', 'requested', 'required_by'))
+    df = pd.DataFrame.from_records(records, columns=COLUMNS)
+    df['required'] = df['required'].astype('bool')
+    df['requested'] = df['requested'].astype('bool')
     return df
 
 
@@ -262,11 +273,9 @@ def build_user_inventory(username):
     for projectrc in sorted(glob(join(user_home, '*', '.projectrc'))):
         project_home = dirname(projectrc)
         t_df = build_project_inventory(project_home)
-        if t_df is not None:
-            t_df.insert(0, 'project', basename(project_home))
-            df.append(t_df)
-    df = pd.concat(df) if df else None
-    return df
+        t_df.insert(0, 'project', basename(project_home))
+        df.append(t_df)
+    return pd.concat(df)
 
 
 def build_node_inventory(project_home=None):
@@ -274,9 +283,8 @@ def build_node_inventory(project_home=None):
         project_home = config.PROJECT_HOME
     df = []
     for user_home in sorted(glob(join(project_home, '*'))):
-        t_df = build_user_inventory(user_home)
-        if t_df is not None:
+        if isdir(user_home):
+            t_df = build_user_inventory(user_home)
             t_df.insert(0, 'user', basename(user_home))
             df.append(t_df)
-    df = pd.concat(df) if df else None
-    return df
+    return pd.concat(df)

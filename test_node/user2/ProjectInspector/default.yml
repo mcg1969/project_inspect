@@ -1,0 +1,9 @@
+name: default
+dependencies:
+- python=3
+- r-base
+- rpy2
+- pandas
+- notebook
+- r-irkernel
+- toolz
