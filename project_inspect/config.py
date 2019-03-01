@@ -1,2 +1,2 @@
-WAKARI_HOME = '/opt/wakari'
-PROJECT_HOME = '/projects'
+WAKARI_ROOT = '/opt/wakari'
+PROJECT_ROOT = '/projects'

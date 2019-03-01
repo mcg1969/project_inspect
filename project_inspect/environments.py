@@ -301,21 +301,19 @@ def environment_by_prefix(envdir, local=None):
     return envdata
 
 
-@functools.lru_cache()
 def kernel_name_to_prefix(project_home, kernel_name):
     parent_dir, project_name = os.path.split(project_home)
     project_root, project_user = os.path.split(parent_dir)
-    if '-' not in kernel_name:
-        return None
-    kernel_loc, language = kernel_name.rsplit('-', 1)
-    if kernel_loc == 'conda-root':
-        return join(config.WAKARI_HOME, 'anaconda')
-    kernel_base = 'conda-env-anaconda-'
-    if kernel_loc.startswith('conda-env-anaconda-'):
-        return join(config.WAKARI_HOME, 'anaconda', 'envs', kernel_loc[len(kernel_base):])
-    kernel_base = 'conda-env-{}-'.format(project_name)
-    if kernel_loc.startswith(kernel_base):
-        return join(project_home, 'envs', kernel_loc[len(kernel_base):])
+    if '-' in kernel_name:
+        kernel_loc, language = kernel_name.rsplit('-', 1)
+        if kernel_loc == 'conda-root':
+            return join(config.WAKARI_HOME, 'anaconda')
+        kernel_base = 'conda-env-anaconda-'
+        if kernel_loc.startswith('conda-env-anaconda-'):
+            return join(config.WAKARI_HOME, 'anaconda', 'envs', kernel_loc[len(kernel_base):])
+        kernel_base = 'conda-env-{}-'.format(project_name)
+        if kernel_loc.startswith(kernel_base):
+            return join(project_home, 'envs', kernel_loc[len(kernel_base):])
     
     
 def modules_to_packages(environment, modules, language):

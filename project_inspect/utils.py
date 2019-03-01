@@ -9,6 +9,5 @@ try:
     if 'IPKernelApp' in get_ipython().config:
         import sys
         logger.handlers = [logging.StreamHandler(sys.stderr)]
-        logger.setLevel(logging.INFO)
 except Exception:
     pass

@@ -15,7 +15,7 @@ import pandas as pd
 
 def visible_project_environments(project_home):
     project_home = join(project_home, 'envs', '')
-    anaconda_root = join(config.WAKARI_HOME, 'anaconda')
+    anaconda_root = join(config.WAKARI_ROOT, 'anaconda')
     anaconda_envs = join(anaconda_root, 'envs', '')
     test_globs = [
             (join(project_home, 'default'), '{}'),
@@ -60,6 +60,8 @@ def find_used_packages(fpath, project_home, prefixes):
         preferred = kernel_name_to_prefix(project_home, kspec)
         if preferred is not None:
             prefixes = [preferred]
+        else:
+            logger.warning("Unexpected kernel name: {}\n  file: {}".format(kspec, fpath))
     else:
         return (None, None, None, None)
     package_name = './' + basename(fpath)
@@ -215,16 +217,89 @@ def all_children(packages, children, field, filter=None):
     return result
 
 
-COLUMNS = ('env', 'package', 'version', 'build', 'required', 'requested', 'required_by')
+COLUMNS = ('owner', 'project', 'environment', 'package', 'version',
+           'build', 'required', 'requested', 'required_by')
 
 
-def build_project_inventory(username, project=None):
-    if '/' in username:
-        project_home = abspath(username)
-    elif project is None:
+def _build_df(records):
+    df = pd.DataFrame.from_records(records, columns=COLUMNS)
+    df['required'] = df['required'].astype('bool')
+    df['requested'] = df['requested'].astype('bool')
+    return df
+
+
+def validate_summarize(level):
+    sep = '_' if '_' in level else '/'
+    parts = set(level.lower().split(sep))
+    project_choices = {'all', 'node', 'owner', 'project', 'environment'} & parts
+    package_choices = {'all', 'package', 'version'} & parts
+    if len(project_choices) == 2:
+        project_choices.discard('all')
+    if len(package_choices) == 2:
+        package_choices.discard('all')
+    unknown = set(parts) - package_choices - project_choices
+    if len(project_choices) > 1 or len(package_choices) > 1 or unknown:
+        raise RuntimeError('Invalid summary type: {}'.format(level))
+    return ''.join(project_choices), ''.join(package_choices)
+
+
+def summarize_data(data, level):
+    project_group, package_group = validate_summarize(level)
+
+    def _summary(data):
+        n_owners = len(data['owner'].drop_duplicates())
+        n_projects = len(data[['owner', 'project']].drop_duplicates())
+        n_envs = len(data[['owner', 'project', 'environment']].drop_duplicates())
+        packages = data[['package', 'version'] if package_group == 'version' else ['package']]
+        n_required = sum(data.required)
+        n_requested = sum(data.requested)
+        n_python = sum(data.package == 'python')
+        n_r = sum(data.package == 'r-base')
+        return (n_owners, n_projects, n_envs, n_required, n_requested, n_python, n_r)
+    columns = ('n_owners', 'n_projects', 'n_environments', 'n_required', 'n_requested', 'n_python', 'n_r')
+
+    if project_group in ('', 'all', 'node'):
+        project_group = 'node'
+        grouping = []
+    elif project_group == 'owner':
+        grouping = ['owner']
+    elif project_group == 'project':
+        grouping = ['owner', 'project']
+    else:
+        grouping = ['owner', 'project', 'environment']
+
+    left, right = len(grouping), 5
+    if package_group in ('', 'all'):
+        right = 7
+    elif package_group == 'package':
+        grouping.append('package')
+    else:
+        grouping.extend(('package', 'version'))
+
+    records = []
+    if not grouping:
+        records.append(_summary(data))
+    else:
+        for group, group_data in data.groupby(grouping):
+            results = _summary(group_data)
+            record = list(group) if isinstance(group, tuple) else [group]
+            record.extend(results[left:right])
+            records.append(record)
+    df = pd.DataFrame(records, columns=grouping + list(columns[left:right]))
+    return df
+
+
+def build_project_inventory(owner_name, project_name=None, project_root=None, records_only=False):
+    if '/' in owner_name:
+        project_home = abspath(owner_name)
+        project_name = basename(project_home)
+        owner_name = basename(dirname(project_home))
+    elif project_name is None:
         raise RuntimeError('The name of the project is missing')
     else:
-        project_home = join(config.PROJECT_HOME, username, project)
+        if project_root is None:
+            project_root = config.PROJECT_ROOT
+        project_home = join(abspath(project_root), owner_name, project_name)
     project_envs = join(project_home, 'envs', '')
     all_envs = find_project_imports(project_home)
     records = []
@@ -251,7 +326,7 @@ def build_project_inventory(username, project=None):
         required -= imported
         for pkg in sorted(imported):
             pdata = packages[pkg]
-            records.append((envname, pkg, pdata['version'], pdata['build'], True, True, ''))
+            records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], True, True, ''))
         for pkg in sorted(required):
             pdata = packages[pkg]
             # If a package depends on another package transitively through one of the base
@@ -261,50 +336,32 @@ def build_project_inventory(username, project=None):
             if not revs:
                 revs = all_children(packages, pdata['reverse'], 'reverse', imported)
             revs = ', '.join(sorted(revs))
-            records.append((envname, pkg, pdata['version'], pdata['build'], True, False, revs))
+            records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], True, False, revs))
         for pkg in sorted(extra):
             pdata = packages[pkg]
-            records.append((envname, pkg, pdata['version'], pdata['build'], False, False, ''))
-    df = pd.DataFrame.from_records(records, columns=COLUMNS)
-    df['required'] = df['required'].astype('bool')
-    df['requested'] = df['requested'].astype('bool')
-    return df
+            records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], False, False, ''))
+    return records if records_only else _build_df(records)
 
 
-def build_user_inventory(username):
-    if '/' in username:
-        user_home = abspath(username)
-        username = basename(user_home)
+def build_owner_inventory(owner_name, project_root=None, records_only=False):
+    if '/' in owner_name:
+        owner_home = owner_name
     else:
-        user_home = join(config.PROJECT_HOME, username)
-    df = []
-    for projectrc in sorted(glob(join(user_home, '*', '.projectrc'))):
-        project_home = dirname(projectrc)
-        t_df = build_project_inventory(project_home)
-        t_df.insert(0, 'project', basename(project_home))
-        df.append(t_df)
-    if df:
-        df = pd.concat(df)
-    else:
-        df = pd.DataFrame.from_records(columns=('project',) + COLUMNS)
-        df['required'] = df['required'].astype('bool')
-        df['requested'] = df['requested'].astype('bool')
-    return df
+        if project_root is None:
+            project_root = config.PROJECT_ROOT
+        owner_home = join(abspath(project_root), owner_name)
+    records = []
+    owner_home = abspath(owner_home)
+    for projectrc in sorted(glob(join(owner_home, '*', '.projectrc'))):
+        records.extend(build_project_inventory(dirname(projectrc), records_only=True))
+    return records if records_only else _build_df(records)
 
 
-def build_node_inventory(project_home=None):
-    if project_home is None:
-        project_home = config.PROJECT_HOME
-    df = []
-    for user_home in sorted(glob(join(project_home, '*'))):
-        if isdir(user_home):
-            t_df = build_user_inventory(user_home)
-            t_df.insert(0, 'user', basename(user_home))
-            df.append(t_df)
-    if df:
-        df = pd.concat(df)
-    else:
-        df = pd.DataFrame.from_records(columns=('user', 'project',) + COLUMNS)
-        df['required'] = df['required'].astype('bool')
-        df['requested'] = df['requested'].astype('bool')
-    return df
+def build_node_inventory(project_root=None, records_only=False):
+    if project_root is None:
+        project_root = config.PROJECT_ROOT
+    records = []
+    project_root = abspath(project_root)
+    for owner_home in sorted(glob(join(project_root, '*'))):
+        records.extend(build_owner_inventory(owner_home, records_only=True))
+    return records if records_only else _build_df(records)
