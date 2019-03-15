@@ -54,7 +54,16 @@ def parse_egg_info(path):
             manifest file (SOURCES.txt, RECORD), if such a file is found.
             If the manifest is not found, an empty list is returned.
     '''
-    name, version = basename(path).rsplit('.', 1)[0].rsplit('-', 2)[:2]
+    name = basename(path).rsplit('.', 1)[0]
+    if path.endswith('.egg-link'):
+        with open(path) as fp:
+            spdir = fp.read().splitlines()[0]
+        name = name.replace('-', '_')
+        path = join(spdir, name + '.egg-info')
+        version = '<dev>'
+    else:
+        spdir = dirname(path)
+        name, version = name.rsplit('-', 2)[:2]
     pdata = {'name': name.lower(),
              'version': version,
              'build': '<pip>',
@@ -64,7 +73,6 @@ def parse_egg_info(path):
         pdata['modules']['python'].update(get_python_importables(path))
         path = join(path, 'EGG-INFO')
     else:
-        spdir = dirname(path)
         tops = [name]
         tname = name.split('.', 1)[0]
         tlpath = join(path, 'top_level.txt')
@@ -150,9 +158,15 @@ def get_eggs(sp_dir):
     '''
     results = []
     for fn in os.listdir(sp_dir):
-        if not fn.endswith(('.egg', '.egg-info', '.dist-info')):
+        if not fn.endswith(('.egg', '.egg-info', '.dist-info', '.egg-link')):
             continue
         path = join(sp_dir, fn)
+        if fn.endswith('.egg-link'):
+            with open(path) as fp:
+                egg_dir = fp.read().splitlines()[0]
+            name = fn.rsplit('.', 1)[0].replace('-', '_')
+            path = join(egg_dir, name + '.egg-info')
+            print(path)
         if (isfile(path) or exists(join(path, 'METADATA')) or
             exists(join(path, 'PKG-INFO')) or
             exists(join(path, 'METADATA'))):
@@ -307,10 +321,10 @@ def kernel_name_to_prefix(project_home, kernel_name):
     if '-' in kernel_name:
         kernel_loc, language = kernel_name.rsplit('-', 1)
         if kernel_loc == 'conda-root':
-            return join(config.WAKARI_HOME, 'anaconda')
+            return join(config.WAKARI_ROOT, 'anaconda')
         kernel_base = 'conda-env-anaconda-'
         if kernel_loc.startswith('conda-env-anaconda-'):
-            return join(config.WAKARI_HOME, 'anaconda', 'envs', kernel_loc[len(kernel_base):])
+            return join(config.WAKARI_ROOT, 'anaconda', 'envs', kernel_loc[len(kernel_base):])
         kernel_base = 'conda-env-{}-'.format(project_name)
         if kernel_loc.startswith(kernel_base):
             return join(project_home, 'envs', kernel_loc[len(kernel_base):])

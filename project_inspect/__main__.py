@@ -37,6 +37,7 @@ Unsummarized data is equivalent to environment/version.""",
 
 def main(**kwargs):
     if kwargs.get('verbose'):
+        import logging
         from .utils import logger
         logger.setLevel(logging.DEBUG)
     root = kwargs.get('root')
