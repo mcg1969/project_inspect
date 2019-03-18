@@ -10,6 +10,7 @@ from glob import glob, iglob
 
 from . import config
 from .imports import find_python_imports, find_r_imports, find_file_imports
+from .utils import load_file
 
 import logging
 logger = logging.getLogger(__name__)
@@ -56,10 +57,12 @@ def parse_egg_info(path):
     '''
     name = basename(path).rsplit('.', 1)[0]
     if path.endswith('.egg-link'):
-        with open(path) as fp:
-            spdir = fp.read().splitlines()[0]
+        data = load_file(path)
+        if data is not None:
+            spdir = fp.read().splitlines()[0].strip()
         name = name.replace('-', '_')
-        path = join(spdir, name + '.egg-info')
+        if data is not None:
+            path = join(spdir, name + '.egg-info')
         version = '<dev>'
     else:
         spdir = dirname(path)
@@ -77,8 +80,10 @@ def parse_egg_info(path):
         tname = name.split('.', 1)[0]
         tlpath = join(path, 'top_level.txt')
         if exists(tlpath):
-            with open(tlpath, encoding='utf-8', errors='ignore') as fp:
-                tops.extend(line for line in map(str.rstrip, fp) if line and line != tname)
+            tldata = load_file(tlpath)
+            if tldata is not None:
+                tops.extend(line for line in map(str.rstrip, tldata.splitlines())
+                            if line and line != tname)
         for top in tops:
             mparts = top.split('.')
             level = len(mparts)
@@ -88,7 +93,8 @@ def parse_egg_info(path):
     fpath = join(path, fname)
     info = {}
     if isfile(fpath):
-        for line in open(fpath, encoding='utf-8', errors='ignore'):
+        data = load_file(fpath) or ''
+        for line in data.splitlines():
             m = re.match(r'(\w+):\s*(\S+)', line, re.I)
             if m:
                 key = m.group(1).lower()
@@ -99,7 +105,8 @@ def parse_egg_info(path):
     else:
         req_txt = join(path, 'requires.txt')
         if exists(req_txt):
-            for dep in open(req_txt, 'rt'):
+            data = load_file(req_txt) or ''
+            for dep in data.splitlines():
                 m = re.match(r'^([\w_-]+)', dep)
                 if not m:
                     break
@@ -108,17 +115,18 @@ def parse_egg_info(path):
 
     
 def parse_conda_meta(mpath):
-    with open(mpath) as fp:
-        mdata = json.load(fp)
-    pdata = {'name': mdata['name'],
-             'version': mdata['version'],
-             'build': mdata['build'],
-             'depends': set(d.split(' ', 1)[0] for d in mdata['depends']),
+    mdata = load_file(mpath) or {}
+    fname, fversion, fbuild = basename(mpath).rsplit('.', 1)[0].rsplit('-', 2)
+    pdata = {'name': mdata.get('name', fname),
+             'version': mdata.get('version', fversion),
+             'build': mdata.get('build', fbuild),
+             'depends': set(d.split(' ', 1)[0] for d in mdata.get('depends', ())),
              'modules': {'python': set(), 'r': set()},
-             'eggs': set()}
+             'eggs': set(),
+             'readable': bool(mdata)}
     py_modules = pdata['modules']['python']
     r_modules = pdata['modules']['r']
-    for fpath in mdata['files']:
+    for fpath in mdata.get('files', ()):
         m1 = re.match(r'^lib/python\d.\d/(?:site-packages/|lib-dynload/|)(.*)$', fpath)
         if m1:
             stub = m1.groups()[0]
@@ -162,11 +170,11 @@ def get_eggs(sp_dir):
             continue
         path = join(sp_dir, fn)
         if fn.endswith('.egg-link'):
-            with open(path) as fp:
-                egg_dir = fp.read().splitlines()[0]
+            data = load_file(path)
+            if data is not None:
+                sp_dir = data.splitlines()[0].strip()
             name = fn.rsplit('.', 1)[0].replace('-', '_')
-            path = join(egg_dir, name + '.egg-info')
-            print(path)
+            path = join(sp_dir, name + '.egg-info')
         if (isfile(path) or exists(join(path, 'METADATA')) or
             exists(join(path, 'PKG-INFO')) or
             exists(join(path, 'METADATA'))):
@@ -200,8 +208,9 @@ def get_python_importables(path, level=0):
                 continue
             fpath = join(root, file)
             if file.endswith('.pth'):
-                with open(fpath, 'rt') as fp:
-                    for npath in fp:
+                data = load_file(fpath) or ''
+                for npath in map(str.strip, data.splitlines()):
+                    if npath:
                         npath = abspath(join(root, npath.strip()))
                         modules.update(get_python_importables(npath))
             elif file == '__init__.py':
@@ -226,9 +235,6 @@ def get_local_packages(path):
                                'imports': {'python': set(), 'r': set()}}
         return packages[bname]
     for module, fpath in get_python_importables(path).items():
-        if not os.access(fpath, os.R_OK):
-            logger.error('CANNOT READ: {}'.format(fpath))
-            continue
         bname = './' + module.split('.', 1)[0]
         if exists(join(path, bname) + '.py'):
             bname += '.py'
@@ -238,9 +244,6 @@ def get_local_packages(path):
         pdata['imports']['python'].update(imports)
     for fpath in glob(join(path, '*.R')) + glob(join(path, '*.ipynb')):
         if not basename(fpath).startswith('.'):
-            if not os.access(fpath, os.R_OK):
-                logger.error('CANNOT READ: {}'.format(fpath))
-                continue
             bname = './' + basename(fpath)
             pdata = _create(bname)
             imports, language = find_file_imports(fpath, submodules=True)

@@ -2,7 +2,7 @@ from . import config
 from .environments import environment_by_prefix, kernel_name_to_prefix, modules_to_packages
 from .imports import find_python_imports, find_r_imports
 
-from .utils import logger
+from .utils import logger, load_file, shortpath, set_log_root
 
 from os.path import join, isdir, isfile, basename, dirname, exists, abspath
 from textwrap import TextWrapper
@@ -35,15 +35,12 @@ def visible_project_environments(project_home):
 
 
 def find_notebook_metadata(fpath):
-    language = nbenv = None
-    fdir = dirname(fpath)
-    with open(fpath, 'r') as fp:
-        ndata = json.load(fp)
+    ndata = load_file(fpath)
     try:
         kspec = ndata['metadata']['kernelspec']
-    except KeyError:
+        return kspec['language'].lower(), kspec['name']
+    except:
         return None, None
-    return kspec['language'].lower(), kspec['name']
 
 
 def find_used_packages(fpath, project_home, prefixes):
@@ -112,17 +109,23 @@ def find_project_imports(project_home):
     project_envs = join(project_home, 'envs', '')
     logger.info('Scanning project: {}/{}'.format(project_user, project_name))
     
+    wrapper = TextWrapper()
+    wrapper.initial_indent = '    '
+    wrapper.subsequent_indent = '      '
+    def _wrap(t):
+        return '\n'.join(wrapper.wrap(t))
+    
     all_envs = {}
     for prefix, shortname in visible_project_environments(project_home):
         all_envs[prefix] = {
             'shortname': shortname, 
             'requested': set(), 
             'missing': {}}
-
-    logger.info('  {} visible environments:'.format(len(all_envs)))
-    for prefix, envrec in all_envs.items():
-        logger.info('    {}: {}'.format(envrec['shortname'], prefix))
-    if not all_envs:
+    if all_envs:
+        logger.info('  {} visible environments:'.format(len(all_envs)))
+        for prefix, envrec in all_envs.items():
+            logger.info('    {}: {}'.format(envrec['shortname'], shortpath(prefix)))
+    else:
         logger.info('    no project environments!')
         all_envs['@'] = {
             'shortname': '<empty>',
@@ -130,12 +133,6 @@ def find_project_imports(project_home):
             'missing': {}
         }
 
-    wrapper = TextWrapper()
-    wrapper.initial_indent = '    '
-    wrapper.subsequent_indent = '      '
-    def _wrap(t):
-        return '\n'.join(wrapper.wrap(t))
-    
     local_envs = {}
     local_depends = {}
     def _touch(pkg, env):
@@ -184,9 +181,7 @@ def find_project_imports(project_home):
             local_depends[pkg[2:]] = set(dep[2:] for dep in pdata['depends'])
         scan_targets = sort_candidates(local_depends)
         
-        visited = set()
         for file in scan_targets:
-            visited.add(file)
             fpath = join(root, file)
             envs = local_envs.get(file) or all_envs
             env_prefix, language, t_requests, t_missing = find_used_packages(fpath, project_home, envs)
@@ -196,7 +191,7 @@ def find_project_imports(project_home):
         logger.info('Summary:')
         for prefix, envrec in all_envs.items():
             if envrec['requested']:
-                logger.info('  {} ({}):'.format(envrec['shortname'], prefix))
+                logger.info('  {} ({}):'.format(envrec['shortname'], shortpath(prefix)))
                 logger.info(_wrap('packages: {}'.format(', '.join(sorted(envrec['requested'])))))
             for language, mset in envrec['missing'].items():
                 logger.info(_wrap('missing {} imports: {}'.format(language, ', '.join(sorted(mset)))))
@@ -300,6 +295,7 @@ def build_project_inventory(owner_name, project_name=None, project_root=None, re
         if project_root is None:
             project_root = config.PROJECT_ROOT
         project_home = join(abspath(project_root), owner_name, project_name)
+    set_log_root(project_home)
     project_envs = join(project_home, 'envs', '')
     all_envs = find_project_imports(project_home)
     records = []
@@ -352,6 +348,7 @@ def build_owner_inventory(owner_name, project_root=None, records_only=False):
         owner_home = join(abspath(project_root), owner_name)
     records = []
     owner_home = abspath(owner_home)
+    set_log_root(owner_home)
     for projectrc in sorted(glob(join(owner_home, '*', '.projectrc'))):
         records.extend(build_project_inventory(dirname(projectrc), records_only=True))
     return records if records_only else _build_df(records)
@@ -362,6 +359,7 @@ def build_node_inventory(project_root=None, records_only=False):
         project_root = config.PROJECT_ROOT
     records = []
     project_root = abspath(project_root)
+    set_log_root(project_root)
     for owner_home in sorted(glob(join(project_root, '*'))):
         records.extend(build_owner_inventory(owner_home, records_only=True))
     return records if records_only else _build_df(records)

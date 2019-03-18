@@ -14,6 +14,8 @@ from lib2to3.pgen2.tokenize import TokenError
 from lib2to3.pygram import python_symbols as syms
 from lib2to3.pytree import Leaf, Node
 
+from .utils import load_file, set_log_root, shortpath
+
 
 def stringify(content):
     if isinstance(content, list):
@@ -109,8 +111,7 @@ def strip_python_magic(cell):
             yield c
 
 
-def find_notebook_imports(nbdata):
-    ndata = json.loads(nbdata)
+def find_notebook_imports(ndata):
     try:
         language = ndata['metadata']['kernelspec']['language'].lower()
     except KeyError:
@@ -136,9 +137,10 @@ def find_file_imports(fpath, submodules=False, locals=False):
         raise RuntimeError('Not a file: {}'.format(fpath))
     if not fpath.endswith(('.ipynb', '.py', '.R')):
         return set(), None
-    with open(fpath, 'rt') as fp:
-        data = fp.read()
-    if fpath.endswith('.ipynb'):
+    data = load_file(fpath)
+    if data is None:
+    	return set(), None
+    elif fpath.endswith('.ipynb'):
         imports, language = find_notebook_imports(data)
     elif fpath.endswith('.py'):
         imports, language = find_python_imports(data), 'python'

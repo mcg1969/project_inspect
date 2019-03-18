@@ -1,4 +1,8 @@
+import os
 import argparse
+
+from . import config
+from .utils import logger, set_log_root
 
 
 # Arguments for command line
@@ -6,9 +10,10 @@ parser = argparse.ArgumentParser(
     prog="python -m project_inspect",
     description="AE4 project inspection utilities.")
 parser.add_argument(
-    "-v", "--verbose",
-    help="show more output",
-    action="store_true")
+    "--log",
+    help="set log level",
+    choices=['error', 'warning', 'info', 'debug'],
+    action="store")
 parser.add_argument(
     "--owner",
     help="Limit the inventory to a single user.",
@@ -36,11 +41,17 @@ Unsummarized data is equivalent to environment/version.""",
 
 
 def main(**kwargs):
-    if kwargs.get('verbose'):
-        import logging
-        from .utils import logger
-        logger.setLevel(logging.DEBUG)
+    loglev = (kwargs.get('log') or 'warning').upper()
+    import logging
+    logging.basicConfig(format='%(message)s')
+    logger.setLevel(getattr(logging, loglev))
     root = kwargs.get('root')
+    if root:
+        root = os.path.abspath(root)
+        set_log_root(root)
+    else:
+        root = config.PROJECT_ROOT
+    logger.info('Project root: {}'.format(root))
     from . import project
     uname = kwargs.get('owner')
     pname = kwargs.get('project')

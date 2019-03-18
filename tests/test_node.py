@@ -82,7 +82,7 @@ def test_cli_nosummary(master_df):
     cmd = ['python', '-m', 'project_inspect', '--root', PROJECT_ROOT]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     outp, errp = proc.communicate()
-    assert 'CANNOT READ: {}/user2/NoEnvs/cannot_read.py\n'.format(PROJECT_ROOT) in errp.decode()
+    assert '/user2/NoEnvs/cannot_read.py: CANNOT READ' in errp.decode()
     from io import BytesIO
     df = _read_csv(BytesIO(outp))
     assert df.equals(master_df)
