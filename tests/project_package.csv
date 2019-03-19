@@ -1,6 +1,7 @@
 owner,project,package,n_environments,n_required,n_requested
 user1,Portfolio,_r-mutex,1,1,0
 user1,Portfolio,appnope,1,1,0
+user1,Portfolio,attrs,1,0,0
 user1,Portfolio,backports,1,1,0
 user1,Portfolio,backports.functools_lru_cache,1,1,0
 user1,Portfolio,backports.shutil_get_terminal_size,1,1,0
@@ -25,6 +26,7 @@ user1,Portfolio,cvxopt,1,1,1
 user1,Portfolio,cycler,1,1,0
 user1,Portfolio,dbus,1,0,0
 user1,Portfolio,decorator,1,1,0
+user1,Portfolio,defusedxml,1,0,0
 user1,Portfolio,entrypoints,1,0,0
 user1,Portfolio,enum34,1,1,0
 user1,Portfolio,expat,1,0,0
@@ -108,6 +110,7 @@ user1,Portfolio,ptyprocess,1,1,0
 user1,Portfolio,pygments,1,1,0
 user1,Portfolio,pyparsing,1,1,0
 user1,Portfolio,pyqt,1,0,0
+user1,Portfolio,pyrsistent,1,0,0
 user1,Portfolio,python,1,1,1
 user1,Portfolio,python-dateutil,1,1,0
 user1,Portfolio,pytz,1,1,0
@@ -302,7 +305,7 @@ user1,ScriptsOnly,asn1crypto,1,0,0
 user1,ScriptsOnly,astroid,1,0,0
 user1,ScriptsOnly,astropy,1,0,0
 user1,ScriptsOnly,atomicwrites,1,0,0
-user1,ScriptsOnly,attrs,1,0,0
+user1,ScriptsOnly,attrs,2,0,0
 user1,ScriptsOnly,babel,1,0,0
 user1,ScriptsOnly,backcall,2,0,0
 user1,ScriptsOnly,backports,1,0,0
@@ -346,7 +349,7 @@ user1,ScriptsOnly,dask-core,1,0,0
 user1,ScriptsOnly,datashape,1,0,0
 user1,ScriptsOnly,dbus,1,0,0
 user1,ScriptsOnly,decorator,2,0,0
-user1,ScriptsOnly,defusedxml,1,0,0
+user1,ScriptsOnly,defusedxml,2,0,0
 user1,ScriptsOnly,distributed,1,0,0
 user1,ScriptsOnly,docutils,1,0,0
 user1,ScriptsOnly,entrypoints,2,0,0
@@ -497,6 +500,7 @@ user1,ScriptsOnly,pyodbc,1,0,0
 user1,ScriptsOnly,pyopenssl,1,0,0
 user1,ScriptsOnly,pyparsing,1,0,0
 user1,ScriptsOnly,pyqt,1,0,0
+user1,ScriptsOnly,pyrsistent,1,0,0
 user1,ScriptsOnly,pysocks,1,0,0
 user1,ScriptsOnly,pytables,1,0,0
 user1,ScriptsOnly,pytest,1,0,0
@@ -719,6 +723,7 @@ user1,ScriptsOnly,zlib,2,2,0
 user1,ScriptsOnly,zstd,2,1,0
 user2,ProjectInspector,_r-mutex,1,1,0
 user2,ProjectInspector,appnope,1,1,0
+user2,ProjectInspector,attrs,1,0,0
 user2,ProjectInspector,backcall,1,1,0
 user2,ProjectInspector,blas,1,1,0
 user2,ProjectInspector,bleach,1,0,0
@@ -735,6 +740,7 @@ user2,ProjectInspector,clangxx_osx-64,1,1,0
 user2,ProjectInspector,compiler-rt,1,1,0
 user2,ProjectInspector,curl,1,1,0
 user2,ProjectInspector,decorator,1,1,0
+user2,ProjectInspector,defusedxml,1,0,0
 user2,ProjectInspector,entrypoints,1,0,0
 user2,ProjectInspector,fontconfig,1,1,0
 user2,ProjectInspector,freetype,1,1,0
@@ -798,6 +804,7 @@ user2,ProjectInspector,prometheus_client,1,0,0
 user2,ProjectInspector,prompt_toolkit,1,1,0
 user2,ProjectInspector,ptyprocess,1,1,0
 user2,ProjectInspector,pygments,1,1,0
+user2,ProjectInspector,pyrsistent,1,0,0
 user2,ProjectInspector,python,1,1,1
 user2,ProjectInspector,python-dateutil,1,1,0
 user2,ProjectInspector,pytz,1,1,0
@@ -874,7 +881,7 @@ user2,ScriptsOnly,asn1crypto,1,0,0
 user2,ScriptsOnly,astroid,1,0,0
 user2,ScriptsOnly,astropy,1,0,0
 user2,ScriptsOnly,atomicwrites,1,0,0
-user2,ScriptsOnly,attrs,1,0,0
+user2,ScriptsOnly,attrs,2,0,0
 user2,ScriptsOnly,babel,1,0,0
 user2,ScriptsOnly,backcall,2,0,0
 user2,ScriptsOnly,backports,1,0,0
@@ -918,7 +925,7 @@ user2,ScriptsOnly,dask-core,1,0,0
 user2,ScriptsOnly,datashape,1,0,0
 user2,ScriptsOnly,dbus,1,0,0
 user2,ScriptsOnly,decorator,2,0,0
-user2,ScriptsOnly,defusedxml,1,0,0
+user2,ScriptsOnly,defusedxml,2,0,0
 user2,ScriptsOnly,distributed,1,0,0
 user2,ScriptsOnly,docutils,1,0,0
 user2,ScriptsOnly,entrypoints,2,0,0
@@ -1069,6 +1076,7 @@ user2,ScriptsOnly,pyodbc,1,0,0
 user2,ScriptsOnly,pyopenssl,1,0,0
 user2,ScriptsOnly,pyparsing,1,0,0
 user2,ScriptsOnly,pyqt,1,0,0
+user2,ScriptsOnly,pyrsistent,1,0,0
 user2,ScriptsOnly,pysocks,1,0,0
 user2,ScriptsOnly,pytables,1,0,0
 user2,ScriptsOnly,pytest,1,0,0
@@ -1289,4 +1297,3 @@ user2,ScriptsOnly,zeromq,2,0,0
 user2,ScriptsOnly,zict,1,0,0
 user2,ScriptsOnly,zlib,2,2,0
 user2,ScriptsOnly,zstd,2,1,0
-

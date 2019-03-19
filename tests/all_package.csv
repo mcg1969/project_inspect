@@ -10,7 +10,7 @@ asn1crypto,2,2,2,0,0
 astroid,2,2,2,0,0
 astropy,2,2,2,0,0
 atomicwrites,2,2,2,0,0
-attrs,2,2,2,0,0
+attrs,2,4,6,0,0
 babel,2,2,2,0,0
 backcall,2,3,5,1,0
 backports,2,3,3,1,0
@@ -58,7 +58,7 @@ dask-core,2,2,2,0,0
 datashape,2,2,2,0,0
 dbus,2,3,3,0,0
 decorator,2,4,6,2,0
-defusedxml,2,2,2,0,0
+defusedxml,2,4,6,0,0
 distributed,2,2,2,0,0
 docutils,2,2,2,0,0
 entrypoints,2,4,6,0,0
@@ -217,6 +217,7 @@ pyodbc,2,2,2,0,0
 pyopenssl,2,2,2,0,0
 pyparsing,2,3,3,1,0
 pyqt,2,3,3,0,0
+pyrsistent,2,4,4,0,0
 pysocks,2,2,2,0,0
 pytables,2,2,2,0,0
 pytest,2,2,2,0,0
@@ -450,4 +451,3 @@ zeromq,2,4,6,2,0
 zict,2,2,2,0,0
 zlib,2,4,6,6,0
 zstd,2,4,6,4,0
-
