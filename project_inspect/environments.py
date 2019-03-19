@@ -247,7 +247,8 @@ def get_local_packages(path):
             bname = './' + basename(fpath)
             pdata = _create(bname)
             imports, language = find_file_imports(fpath, submodules=True)
-            pdata['imports'][language] = imports
+            if language in pdata['imports']:
+                pdata['imports'][language] = imports
     return packages
 
 
