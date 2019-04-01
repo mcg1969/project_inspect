@@ -173,7 +173,7 @@ notebook,2,4,6,0,0
 numba,2,2,2,0,0
 numexpr,2,2,2,0,0
 numpy,2,4,4,2,0
-numpy-base,2,4,4,2,0
+numpy-base,2,4,4,2,1
 numpydoc,2,2,2,0,0
 odo,2,2,2,0,0
 olefile,2,3,3,1,0

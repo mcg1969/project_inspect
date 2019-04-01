@@ -27,9 +27,19 @@ parser.add_argument(
     help="Deliver the output to the named file instead of standard output.",
     action="store")
 parser.add_argument(
-    "--root", '-r',
+    "--root",
     help="Specify the root directory of the project store.",
     action="store")
+parser.add_argument(
+    "--package", action="append",
+    help="""Limit the list/summary to the given package. The argument can
+simply be the name of a package, or a conda-style package/version spec;
+e.g., 'pandas<0.20'. Multiple --package arguments can be supplied.""")
+parser.add_argument(
+    "--package-file", action="store",
+    help="""Read a list of package specs from the given file. One spec
+should be supplied per line. The spec can simply be the name of a package,
+or a conda-style package/version spec; e.g., 'pandas<0.20'.""")
 parser.add_argument(
     "--summarize", '-s',
     help="""Optionally summarize the inventory. Choices include
@@ -64,6 +74,13 @@ def main(**kwargs):
         raise RuntimeError('Must supply --owner with --project')
     else:
         df = project.build_node_inventory(root)
+    packages = kwargs.get('package') or []
+    package_file = kwargs.get('package_file')
+    if package_file:
+        with open(package_file, 'rt') as fp:
+            packages.extend(spec for spec in map(str.strip, fp) if spec)
+    if packages:
+        df = project.filter_data(df, packages)
     summary = kwargs.get('summarize')
     if summary:
         df = project.summarize_data(df, summary)

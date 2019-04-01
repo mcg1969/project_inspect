@@ -1,0 +1,5 @@
+owner,project,n_environments,n_required,n_requested,n_python,n_r
+user1,Portfolio,1,176,16,1,1
+user1,ScriptsOnly,2,79,5,2,1
+user2,ProjectInspector,1,125,8,1,1
+user2,ScriptsOnly,2,79,5,2,1
