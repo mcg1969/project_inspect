@@ -56,30 +56,28 @@ def yield_imports(node):
         yield base + stringify(node)
 
                 
+p3_grammar = pygram.python_grammar_no_print_statement
+p3_driver = driver.Driver(p3_grammar, convert=pytree.convert)
+p2_grammar = pygram.python_grammar
+p2_driver = driver.Driver(p2_grammar, convert=pytree.convert)
+
+
 def find_python_imports(code):
-    p3_grammar = pygram.python_grammar_no_print_statement
-    p3_driver = driver.Driver(p3_grammar, convert=pytree.convert)
     code = code + '\n'
     try:
         tree = p3_driver.parse_string(code, debug=False)
         return set(yield_imports(tree))
-    except (ParseError, TokenError):
+    except:
         pass
-    p2_grammar = pygram.python_grammar
-    p2_driver = driver.Driver(p2_grammar, convert=pytree.convert)
     try:
         tree = p2_driver.parse_string(code, debug=False)
         return set(yield_imports(tree))
-    except (ParseError, TokenError):
+    except:
         pass
     imports = set()
     for line in map(str.strip, code.splitlines()):
         if not line.startswith('#'):
-            try:
-                tree = p3_driver.parse_string(line + '\n', debug=False)
-                imports.update(yield_imports(tree))
-            except (ParseError, TokenError):
-                pass
+            imports.update(find_python_imports(line))
     return imports
 
 
