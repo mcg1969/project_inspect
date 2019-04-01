@@ -77,7 +77,7 @@ def find_python_imports(code):
     imports = set()
     for line in map(str.strip, code.splitlines()):
         if not line.startswith('#'):
-            imports.update(find_python_imports(line))
+            imports.update(find_python_imports(line.lstrip()))
     return imports
 
 
