@@ -3,14 +3,17 @@ from .environments import environment_by_prefix, kernel_name_to_prefix, modules_
 from .imports import find_python_imports, find_r_imports
 
 from .utils import logger, load_file, shortpath, set_log_root
+from .version import VersionSpec
 
 from os.path import join, isdir, isfile, basename, dirname, exists, abspath
 from textwrap import TextWrapper
 from glob import glob
 
 import os
+import re
 import json
 import pandas as pd
+import numpy as np
 
 
 def visible_project_environments(project_home):
@@ -221,6 +224,24 @@ def _build_df(records):
     df['required'] = df['required'].astype('bool')
     df['requested'] = df['requested'].astype('bool')
     return df
+
+
+def filter_data(df, packages):
+    if not packages:
+        return df
+    mask = np.zeros(len(df), dtype=bool)
+    for package in packages:
+        spec = re.match(r'^([A-Za-z0-9-_.]+)\s*(.*)', package)
+        if not spec:
+            raise RuntimeError('Invalid package spec: {}'.format(package))
+        name, version = spec.groups()
+        t_mask = df['package'] == name
+        if t_mask.any() and version:
+            vspec = VersionSpec(version)
+            t2_mask = df['version'][t_mask].apply(vspec.match).values
+            t_mask[t_mask] = t2_mask
+        mask = mask | t_mask
+    return df[mask]
 
 
 def validate_summarize(level):

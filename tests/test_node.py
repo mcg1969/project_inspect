@@ -88,6 +88,18 @@ def test_cli_nosummary(master_df):
     assert df.equals(master_df)
 
 
+def test_cli_filter(master_df):
+    fpath = join(dirname(__file__), 'pfilt')
+    cmd = ['python', '-m', 'project_inspect', '--root', PROJECT_ROOT, '--package-file', fpath]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    outp, errp = proc.communicate()
+    assert '/user2/NoEnvs/cannot_read.py: CANNOT READ' in errp.decode()
+    from io import BytesIO
+    df = _read_csv(BytesIO(outp))
+    filtered_df = master_df[(master_df.package=='xlrd')|(master_df.package=='pytest')].reset_index(drop=True)
+    assert df.equals(filtered_df)
+
+
 @pytest.mark.parametrize('project_group, package_group',
     itertools.product(('all', 'node', 'owner', 'project', 'environment'),
                       ('all', 'package', 'version')))
