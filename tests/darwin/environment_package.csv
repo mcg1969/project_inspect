@@ -863,7 +863,7 @@ user2,ProjectInspector,default,ncurses,1,0
 user2,ProjectInspector,default,nomkl,0,0
 user2,ProjectInspector,default,notebook,0,0
 user2,ProjectInspector,default,numpy,1,0
-user2,ProjectInspector,default,numpy-base,1,0
+user2,ProjectInspector,default,numpy-base,1,1
 user2,ProjectInspector,default,openssl,1,0
 user2,ProjectInspector,default,pandas,1,1
 user2,ProjectInspector,default,pandoc,0,0

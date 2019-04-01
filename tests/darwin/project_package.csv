@@ -788,7 +788,7 @@ user2,ProjectInspector,ncurses,1,1,0
 user2,ProjectInspector,nomkl,1,0,0
 user2,ProjectInspector,notebook,1,0,0
 user2,ProjectInspector,numpy,1,1,0
-user2,ProjectInspector,numpy-base,1,1,0
+user2,ProjectInspector,numpy-base,1,1,1
 user2,ProjectInspector,openssl,1,1,0
 user2,ProjectInspector,pandas,1,1,1
 user2,ProjectInspector,pandoc,1,0,0

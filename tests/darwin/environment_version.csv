@@ -85,7 +85,7 @@ user1,Portfolio,default,nbconvert,5.4.1,0,0
 user1,Portfolio,default,nbformat,4.4.0,0,0
 user1,Portfolio,default,ncurses,6.1,1,0
 user1,Portfolio,default,nomkl,3.0,0,0
-user1,Portfolio,default,notebook,5.7.6,0,0
+user1,Portfolio,default,notebook,5.7.8,0,0
 user1,Portfolio,default,numpy,1.16.2,1,0
 user1,Portfolio,default,numpy-base,1.16.2,1,0
 user1,Portfolio,default,olefile,0.46,1,0
@@ -325,7 +325,7 @@ user1,ScriptsOnly,default,gsl,2.4,1,0
 user1,ScriptsOnly,default,harfbuzz,1.8.8,1,0
 user1,ScriptsOnly,default,icu,58.2,1,0
 user1,ScriptsOnly,default,ipykernel,5.1.0,0,0
-user1,ScriptsOnly,default,ipython,7.3.0,0,0
+user1,ScriptsOnly,default,ipython,7.4.0,0,0
 user1,ScriptsOnly,default,ipython_genutils,0.2.0,0,0
 user1,ScriptsOnly,default,jedi,0.13.3,0,0
 user1,ScriptsOnly,default,jinja2,2.10,0,0
@@ -357,7 +357,7 @@ user1,ScriptsOnly,default,mistune,0.8.4,0,0
 user1,ScriptsOnly,default,nbconvert,5.4.1,0,0
 user1,ScriptsOnly,default,nbformat,4.4.0,0,0
 user1,ScriptsOnly,default,ncurses,6.1,1,0
-user1,ScriptsOnly,default,notebook,5.7.6,0,0
+user1,ScriptsOnly,default,notebook,5.7.8,0,0
 user1,ScriptsOnly,default,openssl,1.1.1b,1,0
 user1,ScriptsOnly,default,pandoc,2.2.3.2,0,0
 user1,ScriptsOnly,default,pandocfilters,1.4.2,0,0
@@ -373,7 +373,7 @@ user1,ScriptsOnly,default,prompt_toolkit,2.0.9,0,0
 user1,ScriptsOnly,default,ptyprocess,0.6.0,0,0
 user1,ScriptsOnly,default,pygments,2.3.1,0,0
 user1,ScriptsOnly,default,pyrsistent,0.14.11,0,0
-user1,ScriptsOnly,default,python,3.7.2,1,1
+user1,ScriptsOnly,default,python,3.7.3,1,1
 user1,ScriptsOnly,default,python-dateutil,2.8.0,0,0
 user1,ScriptsOnly,default,pyzmq,17.1.2,0,0
 user1,ScriptsOnly,default,r-abind,1.4_5,0,0
@@ -529,7 +529,7 @@ user1,ScriptsOnly,default,terminado,0.8.1,0,0
 user1,ScriptsOnly,default,testpath,0.4.2,0,0
 user1,ScriptsOnly,default,tk,8.6.8,1,0
 user1,ScriptsOnly,default,tktable,2.10,1,0
-user1,ScriptsOnly,default,tornado,6.0.1,0,0
+user1,ScriptsOnly,default,tornado,6.0.2,0,0
 user1,ScriptsOnly,default,traitlets,4.3.2,0,0
 user1,ScriptsOnly,default,wcwidth,0.1.7,0,0
 user1,ScriptsOnly,default,webencodings,0.5.1,0,0
@@ -828,7 +828,7 @@ user2,ProjectInspector,default,gsl,2.4,1,0
 user2,ProjectInspector,default,harfbuzz,1.8.8,1,0
 user2,ProjectInspector,default,icu,58.2,1,0
 user2,ProjectInspector,default,ipykernel,5.1.0,1,1
-user2,ProjectInspector,default,ipython,7.3.0,1,1
+user2,ProjectInspector,default,ipython,7.4.0,1,1
 user2,ProjectInspector,default,ipython_genutils,0.2.0,1,0
 user2,ProjectInspector,default,jedi,0.13.3,1,0
 user2,ProjectInspector,default,jinja2,2.10,1,0
@@ -861,9 +861,9 @@ user2,ProjectInspector,default,nbconvert,5.4.1,0,0
 user2,ProjectInspector,default,nbformat,4.4.0,0,0
 user2,ProjectInspector,default,ncurses,6.1,1,0
 user2,ProjectInspector,default,nomkl,3.0,0,0
-user2,ProjectInspector,default,notebook,5.7.6,0,0
+user2,ProjectInspector,default,notebook,5.7.8,0,0
 user2,ProjectInspector,default,numpy,1.16.2,1,0
-user2,ProjectInspector,default,numpy-base,1.16.2,1,0
+user2,ProjectInspector,default,numpy-base,1.16.2,1,1
 user2,ProjectInspector,default,openssl,1.1.1b,1,0
 user2,ProjectInspector,default,pandas,0.24.2,1,1
 user2,ProjectInspector,default,pandoc,2.2.3.2,0,0
@@ -880,7 +880,7 @@ user2,ProjectInspector,default,prompt_toolkit,2.0.9,1,0
 user2,ProjectInspector,default,ptyprocess,0.6.0,1,0
 user2,ProjectInspector,default,pygments,2.3.1,1,0
 user2,ProjectInspector,default,pyrsistent,0.14.11,0,0
-user2,ProjectInspector,default,python,3.7.2,1,1
+user2,ProjectInspector,default,python,3.7.3,1,1
 user2,ProjectInspector,default,python-dateutil,2.8.0,1,0
 user2,ProjectInspector,default,pytz,2018.9,1,0
 user2,ProjectInspector,default,pyzmq,17.1.2,1,0
@@ -936,7 +936,7 @@ user2,ProjectInspector,default,testpath,0.4.2,0,0
 user2,ProjectInspector,default,tk,8.6.8,1,0
 user2,ProjectInspector,default,tktable,2.10,1,0
 user2,ProjectInspector,default,toolz,0.9.0,0,0
-user2,ProjectInspector,default,tornado,6.0.1,1,0
+user2,ProjectInspector,default,tornado,6.0.2,1,0
 user2,ProjectInspector,default,traitlets,4.3.2,1,0
 user2,ProjectInspector,default,wcwidth,0.1.7,1,0
 user2,ProjectInspector,default,webencodings,0.5.1,0,0
@@ -976,7 +976,7 @@ user2,ScriptsOnly,default,gsl,2.4,1,0
 user2,ScriptsOnly,default,harfbuzz,1.8.8,1,0
 user2,ScriptsOnly,default,icu,58.2,1,0
 user2,ScriptsOnly,default,ipykernel,5.1.0,0,0
-user2,ScriptsOnly,default,ipython,7.3.0,0,0
+user2,ScriptsOnly,default,ipython,7.4.0,0,0
 user2,ScriptsOnly,default,ipython_genutils,0.2.0,0,0
 user2,ScriptsOnly,default,jedi,0.13.3,0,0
 user2,ScriptsOnly,default,jinja2,2.10,0,0
@@ -1008,7 +1008,7 @@ user2,ScriptsOnly,default,mistune,0.8.4,0,0
 user2,ScriptsOnly,default,nbconvert,5.4.1,0,0
 user2,ScriptsOnly,default,nbformat,4.4.0,0,0
 user2,ScriptsOnly,default,ncurses,6.1,1,0
-user2,ScriptsOnly,default,notebook,5.7.6,0,0
+user2,ScriptsOnly,default,notebook,5.7.8,0,0
 user2,ScriptsOnly,default,openssl,1.1.1b,1,0
 user2,ScriptsOnly,default,pandoc,2.2.3.2,0,0
 user2,ScriptsOnly,default,pandocfilters,1.4.2,0,0
@@ -1024,7 +1024,7 @@ user2,ScriptsOnly,default,prompt_toolkit,2.0.9,0,0
 user2,ScriptsOnly,default,ptyprocess,0.6.0,0,0
 user2,ScriptsOnly,default,pygments,2.3.1,0,0
 user2,ScriptsOnly,default,pyrsistent,0.14.11,0,0
-user2,ScriptsOnly,default,python,3.7.2,1,1
+user2,ScriptsOnly,default,python,3.7.3,1,1
 user2,ScriptsOnly,default,python-dateutil,2.8.0,0,0
 user2,ScriptsOnly,default,pyzmq,17.1.2,0,0
 user2,ScriptsOnly,default,r-abind,1.4_5,0,0
@@ -1180,7 +1180,7 @@ user2,ScriptsOnly,default,terminado,0.8.1,0,0
 user2,ScriptsOnly,default,testpath,0.4.2,0,0
 user2,ScriptsOnly,default,tk,8.6.8,1,0
 user2,ScriptsOnly,default,tktable,2.10,1,0
-user2,ScriptsOnly,default,tornado,6.0.1,0,0
+user2,ScriptsOnly,default,tornado,6.0.2,0,0
 user2,ScriptsOnly,default,traitlets,4.3.2,0,0
 user2,ScriptsOnly,default,wcwidth,0.1.7,0,0
 user2,ScriptsOnly,default,webencodings,0.5.1,0,0

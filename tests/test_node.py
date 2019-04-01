@@ -61,7 +61,7 @@ def test_user2_ProjectInspector(master_df):
     df = master_df[(master_df.owner == 'user2') & (master_df.project == 'ProjectInspector')]
     assert set(df.environment) == {'default'}
     assert set(df.package[df.requested]) == {'ipykernel', 'ipython', 'pandas', 'python',
-                                             'r-base', 'r-irkernel', 'rpy2'}
+                                             'r-base', 'r-irkernel', 'rpy2', 'numpy-base'}
     assert any(~df.requested & df.required)
     assert any(~df.requested & ~df.required)
 
@@ -110,9 +110,7 @@ def test_summary(master_df, project_group, package_group):
             if col in df.columns:
                 del df[col]
         return df.reset_index(drop=True)
-    if sys.platform != 'darwin' and package_group == 'version':
-        pytest.xfail("version differences possible between plaforms")
-    fpdir = dirname(__file__)
+    fpdir = join(dirname(__file__), sys.platform)
     expected = _read_csv('{}/{}_{}.csv'.format(fpdir, project_group, package_group))
     expected = _clean(expected)
     summary = project.summarize_data(master_df, '{}/{}'.format(project_group, package_group))

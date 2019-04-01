@@ -607,7 +607,7 @@ user2,notebook,2,3,0,0
 user2,numba,1,1,0,0
 user2,numexpr,1,1,0,0
 user2,numpy,2,2,1,0
-user2,numpy-base,2,2,1,0
+user2,numpy-base,2,2,1,1
 user2,numpydoc,1,1,0,0
 user2,odo,1,1,0,0
 user2,olefile,1,1,0,0
