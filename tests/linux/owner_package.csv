@@ -8,7 +8,7 @@ user1,asn1crypto,1,1,0,0
 user1,astroid,1,1,0,0
 user1,astropy,1,1,0,0
 user1,atomicwrites,1,1,0,0
-user1,attrs,2,3,0,0
+user1,attrs,2,3,1,1
 user1,babel,1,1,0,0
 user1,backcall,1,2,0,0
 user1,backports,2,2,1,0
@@ -22,7 +22,6 @@ user1,binutils_linux-64,2,2,2,0
 user1,bitarray,1,1,0,0
 user1,bkcharts,1,1,0,0
 user1,blas,2,2,1,0
-user1,blaze,1,1,0,0
 user1,bleach,2,3,0,0
 user1,blosc,1,1,0,0
 user1,bokeh,2,2,1,1
@@ -49,7 +48,6 @@ user1,cython,1,1,0,0
 user1,cytoolz,1,1,0,0
 user1,dask,1,1,0,0
 user1,dask-core,1,1,0,0
-user1,datashape,1,1,0,0
 user1,dbus,2,2,1,0
 user1,decorator,2,3,1,0
 user1,defusedxml,2,3,0,0
@@ -63,7 +61,6 @@ user1,fastcache,1,1,0,0
 user1,fftw,1,1,1,0
 user1,filelock,1,1,0,0
 user1,flask,1,1,0,0
-user1,flask-cors,1,1,0,0
 user1,fontconfig,2,3,2,0
 user1,freetype,2,3,2,0
 user1,fribidi,2,3,2,0
@@ -174,7 +171,6 @@ user1,numexpr,1,1,0,0
 user1,numpy,2,2,1,0
 user1,numpy-base,2,2,1,0
 user1,numpydoc,1,1,0,0
-user1,odo,1,1,0,0
 user1,olefile,2,2,1,0
 user1,openpyxl,1,1,0,0
 user1,openssl,2,3,3,0
@@ -217,7 +213,7 @@ user1,pyodbc,1,1,0,0
 user1,pyopenssl,1,1,0,0
 user1,pyparsing,2,2,1,0
 user1,pyqt,2,2,1,0
-user1,pyrsistent,2,2,0,0
+user1,pyrsistent,2,3,0,0
 user1,pysocks,1,1,0,0
 user1,pytables,1,1,0,0
 user1,pytest,1,1,0,0
@@ -403,6 +399,7 @@ user1,snappy,1,1,0,0
 user1,snowballstemmer,1,1,0,0
 user1,sortedcollections,1,1,0,0
 user1,sortedcontainers,1,1,0,0
+user1,soupsieve,1,1,0,0
 user1,sphinx,1,1,0,0
 user1,sphinxcontrib,1,1,0,0
 user1,sphinxcontrib-websupport,1,1,0,0
@@ -441,6 +438,7 @@ user1,xz,2,3,3,0
 user1,yaml,2,2,2,0
 user1,zeromq,2,3,1,0
 user1,zict,1,1,0,0
+user1,zipp,1,1,0,0
 user1,zlib,2,3,3,0
 user1,zstd,2,3,2,0
 user2,_r-mutex,2,2,2,0
@@ -464,7 +462,6 @@ user2,binutils_linux-64,2,2,2,0
 user2,bitarray,1,1,0,0
 user2,bkcharts,1,1,0,0
 user2,blas,2,2,1,0
-user2,blaze,1,1,0,0
 user2,bleach,2,3,0,0
 user2,blosc,1,1,0,0
 user2,bokeh,1,1,0,0
@@ -489,7 +486,6 @@ user2,cython,1,1,0,0
 user2,cytoolz,1,1,0,0
 user2,dask,1,1,0,0
 user2,dask-core,1,1,0,0
-user2,datashape,1,1,0,0
 user2,dbus,1,1,0,0
 user2,decorator,2,3,1,0
 user2,defusedxml,2,3,0,0
@@ -501,7 +497,6 @@ user2,expat,1,1,0,0
 user2,fastcache,1,1,0,0
 user2,filelock,1,1,0,0
 user2,flask,1,1,0,0
-user2,flask-cors,1,1,0,0
 user2,fontconfig,2,3,2,0
 user2,freetype,2,3,2,0
 user2,fribidi,2,3,2,0
@@ -607,7 +602,6 @@ user2,numexpr,1,1,0,0
 user2,numpy,2,2,1,0
 user2,numpy-base,2,2,1,1
 user2,numpydoc,1,1,0,0
-user2,odo,1,1,0,0
 user2,olefile,1,1,0,0
 user2,openpyxl,1,1,0,0
 user2,openssl,2,3,3,0
@@ -650,7 +644,7 @@ user2,pyodbc,1,1,0,0
 user2,pyopenssl,1,1,0,0
 user2,pyparsing,1,1,0,0
 user2,pyqt,1,1,0,0
-user2,pyrsistent,2,2,0,0
+user2,pyrsistent,2,3,0,0
 user2,pysocks,1,1,0,0
 user2,pytables,1,1,0,0
 user2,pytest,1,1,0,0
@@ -840,6 +834,7 @@ user2,snappy,1,1,0,0
 user2,snowballstemmer,1,1,0,0
 user2,sortedcollections,1,1,0,0
 user2,sortedcontainers,1,1,0,0
+user2,soupsieve,1,1,0,0
 user2,sphinx,1,1,0,0
 user2,sphinxcontrib,1,1,0,0
 user2,sphinxcontrib-websupport,1,1,0,0
@@ -875,5 +870,6 @@ user2,xz,2,3,3,0
 user2,yaml,1,1,1,0
 user2,zeromq,2,3,1,0
 user2,zict,1,1,0,0
+user2,zipp,1,1,0,0
 user2,zlib,2,3,3,0
 user2,zstd,2,3,2,0
