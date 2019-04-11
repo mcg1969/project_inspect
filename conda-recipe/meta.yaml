@@ -9,15 +9,14 @@ source:
 
 build:
   number: 0
-  noarch: python
   script: {{ PYTHON }} -m pip install . --no-deps --ignore-installed --no-cache-dir -vvv
 
 requirements:
   host:
-    - python=3
+    - python {{ python }}
     - setuptools
   run:
-    - python=3
+    - python {{ python }}
     - pandas
 
 test:
