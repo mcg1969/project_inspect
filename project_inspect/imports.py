@@ -62,22 +62,21 @@ p2_grammar = pygram.python_grammar
 p2_driver = driver.Driver(p2_grammar, convert=pytree.convert)
 
 
-def find_python_imports(code):
+def find_python_imports(code, recurse=True):
+    imports = set()
     code = code + '\n'
     try:
         tree = p3_driver.parse_string(code, debug=False)
-        return set(yield_imports(tree))
+        imports.update(yield_imports(tree))
     except:
-        pass
-    try:
-        tree = p2_driver.parse_string(code, debug=False)
-        return set(yield_imports(tree))
-    except:
-        pass
-    imports = set()
-    for line in map(str.strip, code.splitlines()):
-        if not line.startswith('#'):
-            imports.update(find_python_imports(line.lstrip()))
+        try:
+            tree = p2_driver.parse_string(code, debug=False)
+            imports.update(yield_imports(tree))
+        except:
+            if recurse:
+                for line in map(str.strip, code.splitlines()):
+                    if line and not line.startswith('#'):
+                        imports.update(find_python_imports(line, False))
     return imports
 
 

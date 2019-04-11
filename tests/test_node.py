@@ -39,7 +39,7 @@ def test_user1_Portfolio(master_df):
                                              'pandas', 'psutil', 'python', 'r-base',
                                              'r-dplyr', 'r-ggplot2', 'r-irkernel', 'r-yaml',
                                              'ruamel.ordereddict', 'ruamel.yaml',
-                                             'statsmodels', 'toolz'}
+                                             'statsmodels', 'toolz', 'attrs'}
     assert any(~df.requested & df.required)
     assert any(~df.requested & ~df.required)
 

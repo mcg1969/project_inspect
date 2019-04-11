@@ -1,7 +1,7 @@
 owner,project,package,n_environments,n_required,n_requested
 user1,Portfolio,_r-mutex,1,1,0
 user1,Portfolio,appnope,1,1,0
-user1,Portfolio,attrs,1,0,0
+user1,Portfolio,attrs,1,1,1
 user1,Portfolio,backports,1,1,0
 user1,Portfolio,backports.functools_lru_cache,1,1,0
 user1,Portfolio,backports.shutil_get_terminal_size,1,1,0
@@ -315,7 +315,6 @@ user1,ScriptsOnly,beautifulsoup4,1,0,0
 user1,ScriptsOnly,bitarray,1,0,0
 user1,ScriptsOnly,bkcharts,1,0,0
 user1,ScriptsOnly,blas,1,0,0
-user1,ScriptsOnly,blaze,1,0,0
 user1,ScriptsOnly,bleach,2,0,0
 user1,ScriptsOnly,blosc,1,0,0
 user1,ScriptsOnly,bokeh,1,0,0
@@ -346,7 +345,6 @@ user1,ScriptsOnly,cython,1,0,0
 user1,ScriptsOnly,cytoolz,1,0,0
 user1,ScriptsOnly,dask,1,0,0
 user1,ScriptsOnly,dask-core,1,0,0
-user1,ScriptsOnly,datashape,1,0,0
 user1,ScriptsOnly,dbus,1,0,0
 user1,ScriptsOnly,decorator,2,0,0
 user1,ScriptsOnly,defusedxml,2,0,0
@@ -358,7 +356,6 @@ user1,ScriptsOnly,expat,1,0,0
 user1,ScriptsOnly,fastcache,1,0,0
 user1,ScriptsOnly,filelock,1,0,0
 user1,ScriptsOnly,flask,1,0,0
-user1,ScriptsOnly,flask-cors,1,0,0
 user1,ScriptsOnly,fontconfig,1,1,0
 user1,ScriptsOnly,freetype,2,1,0
 user1,ScriptsOnly,fribidi,1,1,0
@@ -458,7 +455,6 @@ user1,ScriptsOnly,numexpr,1,0,0
 user1,ScriptsOnly,numpy,1,0,0
 user1,ScriptsOnly,numpy-base,1,0,0
 user1,ScriptsOnly,numpydoc,1,0,0
-user1,ScriptsOnly,odo,1,0,0
 user1,ScriptsOnly,olefile,1,0,0
 user1,ScriptsOnly,openpyxl,1,0,0
 user1,ScriptsOnly,openssl,2,2,0
@@ -500,7 +496,7 @@ user1,ScriptsOnly,pyodbc,1,0,0
 user1,ScriptsOnly,pyopenssl,1,0,0
 user1,ScriptsOnly,pyparsing,1,0,0
 user1,ScriptsOnly,pyqt,1,0,0
-user1,ScriptsOnly,pyrsistent,1,0,0
+user1,ScriptsOnly,pyrsistent,2,0,0
 user1,ScriptsOnly,pysocks,1,0,0
 user1,ScriptsOnly,pytables,1,0,0
 user1,ScriptsOnly,pytest,1,0,0
@@ -683,6 +679,7 @@ user1,ScriptsOnly,snappy,1,0,0
 user1,ScriptsOnly,snowballstemmer,1,0,0
 user1,ScriptsOnly,sortedcollections,1,0,0
 user1,ScriptsOnly,sortedcontainers,1,0,0
+user1,ScriptsOnly,soupsieve,1,0,0
 user1,ScriptsOnly,sphinx,1,0,0
 user1,ScriptsOnly,sphinxcontrib,1,0,0
 user1,ScriptsOnly,sphinxcontrib-websupport,1,0,0
@@ -719,6 +716,7 @@ user1,ScriptsOnly,xz,2,2,0
 user1,ScriptsOnly,yaml,1,1,0
 user1,ScriptsOnly,zeromq,2,0,0
 user1,ScriptsOnly,zict,1,0,0
+user1,ScriptsOnly,zipp,1,0,0
 user1,ScriptsOnly,zlib,2,2,0
 user1,ScriptsOnly,zstd,2,1,0
 user2,ProjectInspector,_r-mutex,1,1,0
@@ -891,7 +889,6 @@ user2,ScriptsOnly,beautifulsoup4,1,0,0
 user2,ScriptsOnly,bitarray,1,0,0
 user2,ScriptsOnly,bkcharts,1,0,0
 user2,ScriptsOnly,blas,1,0,0
-user2,ScriptsOnly,blaze,1,0,0
 user2,ScriptsOnly,bleach,2,0,0
 user2,ScriptsOnly,blosc,1,0,0
 user2,ScriptsOnly,bokeh,1,0,0
@@ -922,7 +919,6 @@ user2,ScriptsOnly,cython,1,0,0
 user2,ScriptsOnly,cytoolz,1,0,0
 user2,ScriptsOnly,dask,1,0,0
 user2,ScriptsOnly,dask-core,1,0,0
-user2,ScriptsOnly,datashape,1,0,0
 user2,ScriptsOnly,dbus,1,0,0
 user2,ScriptsOnly,decorator,2,0,0
 user2,ScriptsOnly,defusedxml,2,0,0
@@ -934,7 +930,6 @@ user2,ScriptsOnly,expat,1,0,0
 user2,ScriptsOnly,fastcache,1,0,0
 user2,ScriptsOnly,filelock,1,0,0
 user2,ScriptsOnly,flask,1,0,0
-user2,ScriptsOnly,flask-cors,1,0,0
 user2,ScriptsOnly,fontconfig,1,1,0
 user2,ScriptsOnly,freetype,2,1,0
 user2,ScriptsOnly,fribidi,1,1,0
@@ -1034,7 +1029,6 @@ user2,ScriptsOnly,numexpr,1,0,0
 user2,ScriptsOnly,numpy,1,0,0
 user2,ScriptsOnly,numpy-base,1,0,0
 user2,ScriptsOnly,numpydoc,1,0,0
-user2,ScriptsOnly,odo,1,0,0
 user2,ScriptsOnly,olefile,1,0,0
 user2,ScriptsOnly,openpyxl,1,0,0
 user2,ScriptsOnly,openssl,2,2,0
@@ -1076,7 +1070,7 @@ user2,ScriptsOnly,pyodbc,1,0,0
 user2,ScriptsOnly,pyopenssl,1,0,0
 user2,ScriptsOnly,pyparsing,1,0,0
 user2,ScriptsOnly,pyqt,1,0,0
-user2,ScriptsOnly,pyrsistent,1,0,0
+user2,ScriptsOnly,pyrsistent,2,0,0
 user2,ScriptsOnly,pysocks,1,0,0
 user2,ScriptsOnly,pytables,1,0,0
 user2,ScriptsOnly,pytest,1,0,0
@@ -1259,6 +1253,7 @@ user2,ScriptsOnly,snappy,1,0,0
 user2,ScriptsOnly,snowballstemmer,1,0,0
 user2,ScriptsOnly,sortedcollections,1,0,0
 user2,ScriptsOnly,sortedcontainers,1,0,0
+user2,ScriptsOnly,soupsieve,1,0,0
 user2,ScriptsOnly,sphinx,1,0,0
 user2,ScriptsOnly,sphinxcontrib,1,0,0
 user2,ScriptsOnly,sphinxcontrib-websupport,1,0,0
@@ -1295,5 +1290,6 @@ user2,ScriptsOnly,xz,2,2,0
 user2,ScriptsOnly,yaml,1,1,0
 user2,ScriptsOnly,zeromq,2,0,0
 user2,ScriptsOnly,zict,1,0,0
+user2,ScriptsOnly,zipp,1,0,0
 user2,ScriptsOnly,zlib,2,2,0
 user2,ScriptsOnly,zstd,2,1,0
