@@ -8,7 +8,7 @@ user1,Portfolio,default,backports.shutil_get_terminal_size,1.0.0,1,0
 user1,Portfolio,default,backports_abc,0.5,1,0
 user1,Portfolio,default,blas,1.0,1,0
 user1,Portfolio,default,bleach,3.1.0,0,0
-user1,Portfolio,default,bokeh,1.0.4,1,1
+user1,Portfolio,default,bokeh,1.1.0,1,1
 user1,Portfolio,default,bwidget,1.9.11,1,0
 user1,Portfolio,default,bzip2,1.0.6,1,0
 user1,Portfolio,default,ca-certificates,2019.1.23,1,0
@@ -50,7 +50,7 @@ user1,Portfolio,default,ipykernel,4.10.0,1,1
 user1,Portfolio,default,ipython,5.8.0,1,0
 user1,Portfolio,default,ipython_genutils,0.2.0,1,0
 user1,Portfolio,default,ipywidgets,7.4.2,0,0
-user1,Portfolio,default,jinja2,2.10,1,0
+user1,Portfolio,default,jinja2,2.10.1,1,0
 user1,Portfolio,default,jpeg,9b,1,0
 user1,Portfolio,default,jsonschema,3.0.1,0,0
 user1,Portfolio,default,jupyter,1.0.0,0,0
@@ -108,7 +108,7 @@ user1,Portfolio,default,prompt_toolkit,1.0.15,1,0
 user1,Portfolio,default,psutil,5.6.1,1,1
 user1,Portfolio,default,ptyprocess,0.6.0,1,0
 user1,Portfolio,default,pygments,2.3.1,1,0
-user1,Portfolio,default,pyparsing,2.3.1,1,0
+user1,Portfolio,default,pyparsing,2.4.0,1,0
 user1,Portfolio,default,pyqt,5.9.2,0,0
 user1,Portfolio,default,pyrsistent,0.14.11,0,0
 user1,Portfolio,default,python,2.7.16,1,1
@@ -268,7 +268,7 @@ user1,Portfolio,default,ruamel.yaml,0.15.91,1,1
 user1,Portfolio,default,scandir,1.10.0,1,0
 user1,Portfolio,default,scipy,1.2.1,1,0
 user1,Portfolio,default,send2trash,1.5.0,0,0
-user1,Portfolio,default,setuptools,40.8.0,1,0
+user1,Portfolio,default,setuptools,41.0.0,1,0
 user1,Portfolio,default,simplegeneric,0.8.1,1,0
 user1,Portfolio,default,singledispatch,3.4.0.3,1,0
 user1,Portfolio,default,sip,4.19.8,0,0
@@ -328,7 +328,7 @@ user1,ScriptsOnly,default,ipykernel,5.1.0,0,0
 user1,ScriptsOnly,default,ipython,7.4.0,0,0
 user1,ScriptsOnly,default,ipython_genutils,0.2.0,0,0
 user1,ScriptsOnly,default,jedi,0.13.3,0,0
-user1,ScriptsOnly,default,jinja2,2.10,0,0
+user1,ScriptsOnly,default,jinja2,2.10.1,0,0
 user1,ScriptsOnly,default,jpeg,9b,1,0
 user1,ScriptsOnly,default,jsonschema,3.0.1,0,0
 user1,ScriptsOnly,default,jupyter_client,5.2.4,0,0
@@ -522,7 +522,7 @@ user1,ScriptsOnly,default,r-yaml,2.2.0,0,0
 user1,ScriptsOnly,default,r-zoo,1.8_3,0,0
 user1,ScriptsOnly,default,readline,7.0,1,0
 user1,ScriptsOnly,default,send2trash,1.5.0,0,0
-user1,ScriptsOnly,default,setuptools,40.8.0,1,0
+user1,ScriptsOnly,default,setuptools,41.0.0,1,0
 user1,ScriptsOnly,default,six,1.12.0,0,0
 user1,ScriptsOnly,default,sqlite,3.27.2,1,0
 user1,ScriptsOnly,default,terminado,0.8.1,0,0
@@ -830,7 +830,7 @@ user2,ProjectInspector,default,ipykernel,5.1.0,1,1
 user2,ProjectInspector,default,ipython,7.4.0,1,1
 user2,ProjectInspector,default,ipython_genutils,0.2.0,1,0
 user2,ProjectInspector,default,jedi,0.13.3,1,0
-user2,ProjectInspector,default,jinja2,2.10,1,0
+user2,ProjectInspector,default,jinja2,2.10.1,1,0
 user2,ProjectInspector,default,jpeg,9b,1,0
 user2,ProjectInspector,default,jsonschema,3.0.1,0,0
 user2,ProjectInspector,default,jupyter_client,5.2.4,1,0
@@ -927,7 +927,7 @@ user2,ProjectInspector,default,r-uuid,0.1_2,1,0
 user2,ProjectInspector,default,readline,7.0,1,0
 user2,ProjectInspector,default,rpy2,2.9.4,1,1
 user2,ProjectInspector,default,send2trash,1.5.0,0,0
-user2,ProjectInspector,default,setuptools,40.8.0,1,0
+user2,ProjectInspector,default,setuptools,41.0.0,1,0
 user2,ProjectInspector,default,six,1.12.0,1,0
 user2,ProjectInspector,default,sqlite,3.27.2,1,0
 user2,ProjectInspector,default,terminado,0.8.1,0,0
@@ -978,7 +978,7 @@ user2,ScriptsOnly,default,ipykernel,5.1.0,0,0
 user2,ScriptsOnly,default,ipython,7.4.0,0,0
 user2,ScriptsOnly,default,ipython_genutils,0.2.0,0,0
 user2,ScriptsOnly,default,jedi,0.13.3,0,0
-user2,ScriptsOnly,default,jinja2,2.10,0,0
+user2,ScriptsOnly,default,jinja2,2.10.1,0,0
 user2,ScriptsOnly,default,jpeg,9b,1,0
 user2,ScriptsOnly,default,jsonschema,3.0.1,0,0
 user2,ScriptsOnly,default,jupyter_client,5.2.4,0,0
@@ -1172,7 +1172,7 @@ user2,ScriptsOnly,default,r-yaml,2.2.0,0,0
 user2,ScriptsOnly,default,r-zoo,1.8_3,0,0
 user2,ScriptsOnly,default,readline,7.0,1,0
 user2,ScriptsOnly,default,send2trash,1.5.0,0,0
-user2,ScriptsOnly,default,setuptools,40.8.0,1,0
+user2,ScriptsOnly,default,setuptools,41.0.0,1,0
 user2,ScriptsOnly,default,six,1.12.0,0,0
 user2,ScriptsOnly,default,sqlite,3.27.2,1,0
 user2,ScriptsOnly,default,terminado,0.8.1,0,0

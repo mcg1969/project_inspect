@@ -58,10 +58,12 @@ def find_used_packages(fpath, project_home, prefixes):
         if language is None:
             return (None, None, None, None)
         preferred = kernel_name_to_prefix(project_home, kspec)
-        if preferred is not None:
-            prefixes = [preferred]
-        else:
+        if preferred is None:
             logger.warning("Unexpected kernel name: {}\n  file: {}".format(kspec, fpath))
+        elif not isdir(join(preferred, 'conda-meta')):
+            logger.warning("Missing or invalid kernel environment: {}\n  file: {}\n  directory: {}".format(kspec, fpath, preferred))
+        else:
+            prefixes = [preferred]
     else:
         return (None, None, None, None)
     package_name = './' + basename(fpath)
