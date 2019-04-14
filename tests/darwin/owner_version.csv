@@ -24,7 +24,8 @@ user1,bkcharts,0.2,1,1,0,0
 user1,blas,1.0,2,2,1,0
 user1,bleach,3.1.0,2,3,0,0
 user1,blosc,1.15.0,1,1,0,0
-user1,bokeh,1.0.4,2,2,1,1
+user1,bokeh,1.0.4,1,1,0,0
+user1,bokeh,1.1.0,1,1,1,1
 user1,boto,2.49.0,1,1,0,0
 user1,bottleneck,1.2.1,1,1,0,0
 user1,bwidget,1.9.11,2,2,2,0
@@ -107,7 +108,8 @@ user1,itsdangerous,1.1.0,1,1,0,0
 user1,jbig,2.1,1,1,0,0
 user1,jdcal,1.4,1,1,0,0
 user1,jedi,0.13.3,1,2,0,0
-user1,jinja2,2.10,2,3,1,0
+user1,jinja2,2.10,1,1,0,0
+user1,jinja2,2.10.1,2,2,1,0
 user1,jpeg,9b,2,3,2,0
 user1,jsonschema,3.0.1,2,3,0,0
 user1,jupyter,1.0.0,2,2,0,0
@@ -216,7 +218,8 @@ user1,pygments,2.3.1,2,3,1,0
 user1,pylint,2.3.1,1,1,0,0
 user1,pyodbc,4.0.26,1,1,0,0
 user1,pyopenssl,19.0.0,1,1,0,0
-user1,pyparsing,2.3.1,2,2,1,0
+user1,pyparsing,2.3.1,1,1,0,0
+user1,pyparsing,2.4.0,1,1,1,0
 user1,pyqt,5.9.2,2,2,0,0
 user1,pyrsistent,0.14.11,2,3,0,0
 user1,pysocks,1.6.8,1,1,0,0
@@ -397,7 +400,8 @@ user1,scikit-learn,0.20.3,1,1,0,0
 user1,scipy,1.2.1,2,2,1,0
 user1,seaborn,0.9.0,1,1,0,0
 user1,send2trash,1.5.0,2,3,0,0
-user1,setuptools,40.8.0,2,3,3,0
+user1,setuptools,40.8.0,1,1,1,0
+user1,setuptools,41.0.0,2,2,2,0
 user1,simplegeneric,0.8.1,2,2,1,0
 user1,singledispatch,3.4.0.3,2,2,1,0
 user1,sip,4.19.8,2,2,0,0
@@ -547,7 +551,8 @@ user2,itsdangerous,1.1.0,1,1,0,0
 user2,jbig,2.1,1,1,0,0
 user2,jdcal,1.4,1,1,0,0
 user2,jedi,0.13.3,2,3,1,0
-user2,jinja2,2.10,2,3,1,0
+user2,jinja2,2.10,1,1,0,0
+user2,jinja2,2.10.1,2,2,1,0
 user2,jpeg,9b,2,3,2,0
 user2,jsonschema,3.0.1,2,3,0,0
 user2,jupyter,1.0.0,1,1,0,0
@@ -836,7 +841,8 @@ user2,scikit-learn,0.20.3,1,1,0,0
 user2,scipy,1.2.1,1,1,0,0
 user2,seaborn,0.9.0,1,1,0,0
 user2,send2trash,1.5.0,2,3,0,0
-user2,setuptools,40.8.0,2,3,3,0
+user2,setuptools,40.8.0,1,1,1,0
+user2,setuptools,41.0.0,2,2,2,0
 user2,simplegeneric,0.8.1,1,1,0,0
 user2,singledispatch,3.4.0.3,1,1,0,0
 user2,sip,4.19.8,1,1,0,0
