@@ -113,14 +113,26 @@ def get_eggs(sp_dir):
     '''
     results = {}
     for fn in os.listdir(sp_dir):
+        if not fn.endswith(('.egg-info', '.dist-info', '.egg', '.egg-link')):
+            continue
         fullpath = os.path.join(sp_dir, fn)
         factory = pkg_resources.dist_factory(sp_dir, fn, False)
-        for dist in factory(fullpath):
-            pdata = results.setdefault(fn, {'build': '<pip>'})
-            pdata.setdefault('name', dist.project_name)
-            pdata.setdefault('version', dist.version or '<dev>')
-            pdata.setdefault('depends', set()).update(r.name for r in dist.requires())
-            pdata.setdefault('modules', {'python': set(), 'r': set()})
+        try:
+            dists = list(factory(fullpath))
+        except Exception as e:
+            logger.warning('Error reading eggs in {}:\n{}'.format(fullpath, e))
+            dists = []
+        pdata = {'name': None,
+                 'version': None,
+                 'build': '<pip>',
+                 'depends': set(),
+                 'modules': {'python': set(), 'r': set()}}
+        results[fn] = pdata
+        for dist in dists:
+            if pdata['name'] is None:
+                pdata['name'] = dist.project_name
+                pdata['version'] = dist.version or '<dev>'
+            pdata['depends'].update(r.name for r in dist.requires())
             sources = 'RECORD' if dist.has_metadata('RECORD') else 'SOURCES.txt'
             if dist.has_metadata(sources) and dist.has_metadata('top_level.txt'):
                 sources = list(map(str.strip, dist.get_metadata(sources).splitlines()))
@@ -136,6 +148,13 @@ def get_eggs(sp_dir):
                             else:
                                 continue
                             pdata['modules']['python'].add(src.replace('/', '.'))
+        if not pdata['name']:
+            name, version = fn.rsplit('.', 1)[0], '<dev>'
+            if fn.endswith('.dist-info'):
+                name, version = fn.rsplit('-', 1)
+            elif fn.endswith('.egg-info'):
+                name, version, _ = fn.rsplit('-', 2)
+            pdata['name'], pdata['version'] = name, version
     return results
 
 

@@ -927,7 +927,7 @@ user2,ProjectInspector,default,r-uuid,1,0
 user2,ProjectInspector,default,readline,1,0
 user2,ProjectInspector,default,rpy2,1,1
 user2,ProjectInspector,default,send2trash,0,0
-user2,ProjectInspector,default,setuptools,1,0
+user2,ProjectInspector,default,setuptools,1,1
 user2,ProjectInspector,default,six,1,0
 user2,ProjectInspector,default,sqlite,1,0
 user2,ProjectInspector,default,terminado,0,0

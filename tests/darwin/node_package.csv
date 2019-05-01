@@ -397,7 +397,7 @@ scikit-learn,2,2,2,0,0
 scipy,2,3,3,1,0
 seaborn,2,2,2,0,0
 send2trash,2,4,6,0,0
-setuptools,2,4,6,6,0
+setuptools,2,4,6,6,1
 simplegeneric,2,3,3,1,0
 singledispatch,2,3,3,1,0
 sip,2,3,3,0,0

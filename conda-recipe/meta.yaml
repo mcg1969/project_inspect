@@ -18,6 +18,7 @@ requirements:
   run:
     - python {{ python }}
     - pandas
+    - setuptools
 
 test:
   source_files:
