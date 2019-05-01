@@ -40,6 +40,7 @@ def test_user1_Portfolio(master_df):
                                              'r-dplyr', 'r-ggplot2', 'r-irkernel', 'r-yaml',
                                              'ruamel.ordereddict', 'ruamel.yaml',
                                              'statsmodels', 'toolz', 'attrs'}
+    assert all(df.build[df.package.str.startswith('ruamel.')] == '<pip>')
     assert any(~df.requested & df.required)
     assert any(~df.requested & ~df.required)
 
@@ -61,7 +62,8 @@ def test_user2_ProjectInspector(master_df):
     df = master_df[(master_df.owner == 'user2') & (master_df.project == 'ProjectInspector')]
     assert set(df.environment) == {'default'}
     assert set(df.package[df.requested]) == {'ipykernel', 'ipython', 'pandas', 'python',
-                                             'r-base', 'r-irkernel', 'rpy2', 'numpy-base'}
+                                             'r-base', 'r-irkernel', 'rpy2', 'numpy-base',
+                                             'setuptools'}
     assert any(~df.requested & df.required)
     assert any(~df.requested & ~df.required)
 

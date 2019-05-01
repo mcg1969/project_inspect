@@ -843,7 +843,7 @@ user2,ProjectInspector,r-uuid,1,1,0
 user2,ProjectInspector,readline,1,1,0
 user2,ProjectInspector,rpy2,1,1,1
 user2,ProjectInspector,send2trash,1,0,0
-user2,ProjectInspector,setuptools,1,1,0
+user2,ProjectInspector,setuptools,1,1,1
 user2,ProjectInspector,six,1,1,0
 user2,ProjectInspector,sqlite,1,1,0
 user2,ProjectInspector,terminado,1,0,0
