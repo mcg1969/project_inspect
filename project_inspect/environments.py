@@ -179,23 +179,13 @@ def get_python_importables(path, level=0):
     root_len = len(root_path) + 1
     for root, dirs, files in gen:
         dirs[:] = [d for d in dirs if not d.startswith('.')
-                   and (exists(join(root, d, '__init__.py'))
-                        or root == root_path and d.endswith('.egg'))]
-        if root == root_path and root.endswith('.egg'):
-            base_module = ''
-        else:
-            base_module = root[root_len:].replace('/', '.')
+                   and exists(join(root, d, '__init__.py'))]
+        base_module = root[root_len:].replace('/', '.')
         for file in files:
             if file.startswith('.'):
                 continue
             fpath = join(root, file)
-            if file.endswith(('.pth', '.egg')) and not file.endswith('-nspkg.pth'):
-                if root == root_path:
-                    print(fpath)
-                    pdata = parse_egg_info(fpath)
-                    if pdata:
-                        modules.update((k, fpath) for k in pdata['modules']['python'])
-            elif file == '__init__.py':
+            if file == '__init__.py':
                 modules[base_module] = fpath
             elif file.endswith(('.so', '.py')):
                 file = file.rsplit('.', 1)[0]
@@ -216,12 +206,20 @@ def get_local_packages(path):
                                'modules': {'python': set(), 'r': set()},
                                'imports': {'python': set(), 'r': set()}}
         return packages[bname]
+    all_modules = {}
+    for pdata in get_eggs(path).values():
+        packages[pdata['name']] = pdata
+        pdata['build'] = '<local>'
+        pdata['imports'] = {'python': set(), 'r': set()}
+        all_modules.update((k, pdata['name']) for k in pdata['modules']['python'])
     for module, fpath in get_python_importables(path).items():
-        bname = './' + module.split('.', 1)[0]
-        if exists(join(path, bname) + '.py'):
-            bname += '.py'
-        pdata = _create(bname)
+        bname = all_modules.get(module)
+        if bname is None:
+            bname = './' + module.split('.', 1)[0]
+            if exists(join(path, bname) + '.py'):
+                bname += '.py'
         imports, _ = find_file_imports(fpath, submodules=True)
+        pdata = _create(bname)
         pdata['modules']['python'].add(module)
         pdata['imports']['python'].update(imports)
     for fpath in glob(join(path, '*.R')) + glob(join(path, '*.ipynb')):
