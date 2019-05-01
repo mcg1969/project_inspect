@@ -13,6 +13,7 @@ from .imports import find_python_imports, find_r_imports, find_file_imports
 from .utils import load_file
 
 import logging
+import pkg_resources
 logger = logging.getLogger(__name__)
 
 __all__ = ['environment_by_prefix', 'kernel_name_to_prefix']
@@ -32,6 +33,7 @@ def get_python_builtins(pybin):
     Returns:
         set: a set of module names.
     '''
+
     try:
         cmd = [pybin, '-c', 'import sys, json; print(json.dumps(sys.builtin_module_names))']
         pycall = subprocess.check_output(cmd)
@@ -42,78 +44,23 @@ def get_python_builtins(pybin):
         return set(sys.builtin_module_names)
 
 
-def parse_egg_info(path):
+def get_python_path(prefix):
     '''
-    Returns the name, version, and key file list for a pip package.
+    Determines the standard python path for a given prefix.
 
     Args:
-        path (str): path to the egg file or directory
+        prefix (str): path to the base of the Python environment.
     Returns:
-        name (str): the name of the package.
-        version (str): the version of the package.
-        files (list of str): a list of the Python files found in the
-            manifest file (SOURCES.txt, RECORD), if such a file is found.
-            If the manifest is not found, an empty list is returned.
+        results: a list of paths.
     '''
-    name = basename(path).rsplit('.', 1)[0]
-    if path.endswith('.egg-link'):
-        data = load_file(path)
-        if data is not None:
-            spdir = fp.read().splitlines()[0].strip()
-        name = name.replace('-', '_')
-        if data is not None:
-            path = join(spdir, name + '.egg-info')
-        version = '<dev>'
-    else:
-        spdir = dirname(path)
-        name, version = name.rsplit('-', 2)[:2]
-    pdata = {'name': name.lower(),
-             'version': version,
-             'build': '<pip>',
-             'depends': set(),
-             'modules': {'python': set(), 'r': set()}}
-    if path.endswith('.egg'):
-        pdata['modules']['python'].update(get_python_importables(path))
-        path = join(path, 'EGG-INFO')
-    else:
-        tops = [name]
-        tname = name.split('.', 1)[0]
-        tlpath = join(path, 'top_level.txt')
-        if exists(tlpath):
-            tldata = load_file(tlpath)
-            if tldata is not None:
-                tops.extend(line for line in map(str.rstrip, tldata.splitlines())
-                            if line and line != tname)
-        for top in tops:
-            mparts = top.split('.')
-            level = len(mparts)
-            mpath = join(spdir, *mparts)
-            pdata['modules']['python'].update(get_python_importables(mpath, level=level))
-    fname = 'METADATA' if path.endswith('.dist-info') else 'PKG-INFO'
-    fpath = join(path, fname)
-    info = {}
-    if isfile(fpath):
-        data = load_file(fpath) or ''
-        for line in data.splitlines():
-            m = re.match(r'(\w+):\s*(\S+)', line, re.I)
-            if m:
-                key = m.group(1).lower()
-                info.setdefault(key, []).append(m.group(2))
-            break
-    if 'Requires-Dist' in info:
-        pdata['depends'].update(x.split(' ', 1)[0].lower() for x in info['requires-dist'])
-    else:
-        req_txt = join(path, 'requires.txt')
-        if exists(req_txt):
-            data = load_file(req_txt) or ''
-            for dep in data.splitlines():
-                m = re.match(r'^([\w_-]+)', dep)
-                if not m:
-                    break
-                pdata['depends'].add(m.groups()[0].lower())
-    return pdata
 
-    
+    results = (glob(join(prefix, 'lib', 'python*.zip')) +
+               glob(join(prefix, 'lib', 'python?.?')) +
+               glob(join(prefix, 'lib', 'python?.?', 'lib-dynload')) +
+               glob(join(prefix, 'lib', 'python?.?', 'site-packages')))
+    return results
+
+
 def parse_conda_meta(mpath):
     mdata = load_file(mpath) or {}
     fname, fversion, fbuild = basename(mpath).rsplit('.', 1)[0].rsplit('-', 2)
@@ -164,22 +111,32 @@ def get_eggs(sp_dir):
     Returns:
         list: a list of the egg files/dirs found in that directory.
     '''
-    results = []
+    results = {}
     for fn in os.listdir(sp_dir):
-        if not fn.endswith(('.egg', '.egg-info', '.dist-info', '.egg-link')):
-            continue
-        path = join(sp_dir, fn)
-        if fn.endswith('.egg-link'):
-            data = load_file(path)
-            if data is not None:
-                sp_dir = data.splitlines()[0].strip()
-            name = fn.rsplit('.', 1)[0].replace('-', '_')
-            path = join(sp_dir, name + '.egg-info')
-        if (isfile(path) or exists(join(path, 'METADATA')) or
-            exists(join(path, 'PKG-INFO')) or
-            exists(join(path, 'METADATA'))):
-            results.append(fn)
-    return set(results)
+        fullpath = os.path.join(sp_dir, fn)
+        factory = pkg_resources.dist_factory(sp_dir, fn, False)
+        for dist in factory(fullpath):
+            pdata = results.setdefault(fn, {'build': '<pip>'})
+            pdata.setdefault('name', dist.project_name)
+            pdata.setdefault('version', dist.version or '<dev>')
+            pdata.setdefault('depends', set()).update(r.name for r in dist.requires())
+            pdata.setdefault('modules', {'python': set(), 'r': set()})
+            sources = 'RECORD' if dist.has_metadata('RECORD') else 'SOURCES.txt'
+            if dist.has_metadata(sources) and dist.has_metadata('top_level.txt'):
+                sources = list(map(str.strip, dist.get_metadata(sources).splitlines()))
+                top_level = list(map(str.strip, dist.get_metadata('top_level.txt').splitlines()))
+                for top in top_level:
+                    top_s = top + '/'
+                    for src in sources:
+                            src = src.split(',', 1)[0]
+                            if src.endswith('__init__.py'):
+                                src = dirname(src)
+                            elif src.endswith(('.py', '.so')):
+                                src = src[:-3]
+                            else:
+                                continue
+                            pdata['modules']['python'].add(src.replace('/', '.'))
+    return results
 
 
 @functools.lru_cache()
@@ -194,6 +151,8 @@ def get_python_importables(path, level=0):
                 gen = [(dirname(path), [], [basename(path) + sfx])]
                 path = dirname(path)
                 level -= 1
+    else:
+        return modules
     root_path = path.rstrip('/')
     while level > 0:
         root_path = dirname(root_path)
@@ -201,18 +160,22 @@ def get_python_importables(path, level=0):
     root_len = len(root_path) + 1
     for root, dirs, files in gen:
         dirs[:] = [d for d in dirs if not d.startswith('.')
-                   and exists(join(root, d, '__init__.py'))]
-        base_module = root[root_len:].replace('/', '.')
+                   and (exists(join(root, d, '__init__.py'))
+                        or root == root_path and d.endswith('.egg'))]
+        if root == root_path and root.endswith('.egg'):
+            base_module = ''
+        else:
+            base_module = root[root_len:].replace('/', '.')
         for file in files:
             if file.startswith('.'):
                 continue
             fpath = join(root, file)
-            if file.endswith('.pth'):
-                data = load_file(fpath) or ''
-                for npath in map(str.strip, data.splitlines()):
-                    if npath:
-                        npath = abspath(join(root, npath.strip()))
-                        modules.update(get_python_importables(npath))
+            if file.endswith(('.pth', '.egg')) and not file.endswith('-nspkg.pth'):
+                if root == root_path:
+                    print(fpath)
+                    pdata = parse_egg_info(fpath)
+                    if pdata:
+                        modules.update((k, fpath) for k in pdata['modules']['python'])
             elif file == '__init__.py':
                 modules[base_module] = fpath
             elif file.endswith(('.so', '.py')):
@@ -295,13 +258,14 @@ def environment_by_prefix(envdir, local=None):
 
     # Find all non-conda egg directories and determine package name and version
     # If a manifest exists, use that to remove imports from the unmanaged list
-    eggfiles = set()
+    eggfiles = {}
     for spdir in glob(join(envdir, 'lib', 'python*', 'site-packages')):
-        eggfiles = get_eggs(spdir)
+        eggfiles.update(get_eggs(spdir))
     for pdata in packages.values():
-        eggfiles -= pdata['eggs']
-    for eggfile in eggfiles:
-        pdata = parse_egg_info(join(spdir, eggfile))
+        for egg in pdata['eggs']:
+            if egg in eggfiles:
+                del eggfiles[egg]
+    for eggfile, pdata in eggfiles.items():
         pname = pdata['name']
         packages[pdata['name']] = pdata
         for language, mdata in pdata['modules'].items():
