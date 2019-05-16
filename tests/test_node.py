@@ -112,6 +112,8 @@ def test_summary(master_df, project_group, package_group):
             if col in df.columns:
                 del df[col]
         return df.reset_index(drop=True)
+    if package_group == 'version':
+        pytest.xfail('Versions can differ')
     fpdir = join(dirname(__file__), sys.platform)
     expected = _read_csv('{}/{}_{}.csv'.format(fpdir, project_group, package_group))
     expected = _clean(expected)
@@ -121,6 +123,4 @@ def test_summary(master_df, project_group, package_group):
         print(summary)
         print(expected)
     assert summary.equals(expected)
-
-
 
