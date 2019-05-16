@@ -71,14 +71,15 @@ def find_used_packages(fpath, project_home, prefixes):
     best = None
     for prefix in prefixes:
         environment = environment_by_prefix(prefix, fdir)
-        modules = environment['packages'][package_name]['imports'][language]
-        requested, missing = modules_to_packages(environment, modules, language)
-        candidate = (prefix, language, requested, missing, len(missing))
-        if best is None or candidate[-1] < best[-1]:
-            best = candidate
-        if best[-1] == 0:
-            break
-    return best[:-1]
+        if package_name in environment['packages']:
+            modules = environment['packages'][package_name]['imports'][language]
+            requested, missing = modules_to_packages(environment, modules, language)
+            candidate = (prefix, language, requested, missing, len(missing))
+            if best is None or candidate[-1] < best[-1]:
+                best = candidate
+            if best[-1] == 0:
+                break
+    return best[:-1] if best else (None, None, None, None)
 
 
 def sort_candidates(depends):
@@ -153,7 +154,7 @@ def find_project_imports(project_home):
         fdir = dirname(fpath)
         fbase = fpath[root_len:]
         if env_prefix is None:
-            logger.info('  {}: empty notebook'.format(fbase))
+            logger.info('  {}: empty notebook/package'.format(fbase))
             return
         local_imports = set()
         env_imports = set()
@@ -189,8 +190,11 @@ def find_project_imports(project_home):
         for file in scan_targets:
             fpath = join(root, file)
             envs = local_envs.get(file) or all_envs
-            env_prefix, language, t_requests, t_missing = find_used_packages(fpath, project_home, envs)
-            _process(fpath, env_prefix, language, t_requests, t_missing)
+            try:
+                env_prefix, language, t_requests, t_missing = find_used_packages(fpath, project_home, envs)
+                _process(fpath, env_prefix, language, t_requests, t_missing)
+            except Exception as e:
+                logger.warning(_wrap('Unexpected error processing {}:\n  - {}'.format(fpath, str(e))))
             
     if any(envrec['requested'] or envrec['missing'] for envrec in all_envs.values()):
         logger.info('Summary:')

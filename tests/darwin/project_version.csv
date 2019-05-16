@@ -101,13 +101,13 @@ user1,Portfolio,pcre,8.43,1,1,0
 user1,Portfolio,pexpect,4.7.0,1,1,0
 user1,Portfolio,pickleshare,0.7.5,1,1,0
 user1,Portfolio,pillow,6.0.0,1,1,0
-user1,Portfolio,pip,19.1,1,1,0
+user1,Portfolio,pip,19.1.1,1,1,0
 user1,Portfolio,pixman,0.38.0,1,1,0
 user1,Portfolio,prometheus_client,0.6.0,1,0,0
 user1,Portfolio,prompt_toolkit,1.0.15,1,1,0
 user1,Portfolio,psutil,5.6.2,1,1,1
 user1,Portfolio,ptyprocess,0.6.0,1,1,0
-user1,Portfolio,pygments,2.3.1,1,1,0
+user1,Portfolio,pygments,2.4.0,1,1,0
 user1,Portfolio,pyparsing,2.4.0,1,1,0
 user1,Portfolio,pyqt,5.9.2,1,0,0
 user1,Portfolio,pyrsistent,0.14.11,1,0,0
@@ -117,7 +117,7 @@ user1,Portfolio,pytz,2019.1,1,1,0
 user1,Portfolio,pyyaml,5.1,1,1,0
 user1,Portfolio,pyzmq,17.1.2,1,1,0
 user1,Portfolio,qt,5.9.7,1,0,0
-user1,Portfolio,qtconsole,4.4.3,1,0,0
+user1,Portfolio,qtconsole,4.4.4,1,0,0
 user1,Portfolio,r-abind,1.4_5,1,0,0
 user1,Portfolio,r-assertthat,0.2.0,1,1,0
 user1,Portfolio,r-backports,1.1.2,1,0,0
@@ -264,7 +264,7 @@ user1,Portfolio,r-yaml,2.2.0,1,1,1
 user1,Portfolio,r-zoo,1.8_3,1,0,0
 user1,Portfolio,readline,7.0,1,1,0
 user1,Portfolio,ruamel.ordereddict,0.4.13,1,1,1
-user1,Portfolio,ruamel.yaml,0.15.94,1,1,1
+user1,Portfolio,ruamel.yaml,0.15.95,1,1,1
 user1,Portfolio,scandir,1.10.0,1,1,0
 user1,Portfolio,scipy,1.2.1,1,1,0
 user1,Portfolio,send2trash,1.5.0,1,0,0
@@ -287,7 +287,7 @@ user1,Portfolio,tornado,5.1.1,1,1,0
 user1,Portfolio,traitlets,4.3.2,1,1,0
 user1,Portfolio,wcwidth,0.1.7,1,1,0
 user1,Portfolio,webencodings,0.5.1,1,0,0
-user1,Portfolio,wheel,0.33.1,1,1,0
+user1,Portfolio,wheel,0.33.4,1,1,0
 user1,Portfolio,widgetsnbextension,3.4.2,1,0,0
 user1,Portfolio,xz,5.2.4,1,1,0
 user1,Portfolio,yaml,0.1.7,1,1,0
@@ -484,7 +484,7 @@ user1,ScriptsOnly,pexpect,4.7.0,1,0,0
 user1,ScriptsOnly,pickleshare,0.7.5,2,0,0
 user1,ScriptsOnly,pillow,5.4.1,1,0,0
 user1,ScriptsOnly,pip,19.0.3,1,1,0
-user1,ScriptsOnly,pip,19.1,1,1,0
+user1,ScriptsOnly,pip,19.1.1,1,1,0
 user1,ScriptsOnly,pixman,0.38.0,1,1,0
 user1,ScriptsOnly,pkginfo,1.5.0.1,1,0,0
 user1,ScriptsOnly,pluggy,0.9.0,1,0,0
@@ -501,7 +501,8 @@ user1,ScriptsOnly,pycparser,2.19,1,0,0
 user1,ScriptsOnly,pycrypto,2.6.1,1,0,0
 user1,ScriptsOnly,pycurl,7.43.0.2,1,0,0
 user1,ScriptsOnly,pyflakes,2.1.1,1,0,0
-user1,ScriptsOnly,pygments,2.3.1,2,0,0
+user1,ScriptsOnly,pygments,2.3.1,1,0,0
+user1,ScriptsOnly,pygments,2.4.0,1,0,0
 user1,ScriptsOnly,pylint,2.3.1,1,0,0
 user1,ScriptsOnly,pyodbc,4.0.26,1,0,0
 user1,ScriptsOnly,pyopenssl,19.0.0,1,0,0
@@ -719,7 +720,8 @@ user1,ScriptsOnly,urllib3,1.24.1,1,0,0
 user1,ScriptsOnly,wcwidth,0.1.7,2,0,0
 user1,ScriptsOnly,webencodings,0.5.1,2,0,0
 user1,ScriptsOnly,werkzeug,0.14.1,1,0,0
-user1,ScriptsOnly,wheel,0.33.1,2,2,0
+user1,ScriptsOnly,wheel,0.33.1,1,1,0
+user1,ScriptsOnly,wheel,0.33.4,1,1,0
 user1,ScriptsOnly,widgetsnbextension,3.4.2,1,0,0
 user1,ScriptsOnly,wrapt,1.11.1,1,0,0
 user1,ScriptsOnly,wurlitzer,1.0.2,1,0,0
@@ -812,12 +814,12 @@ user2,ProjectInspector,parso,0.4.0,1,1,0
 user2,ProjectInspector,pcre,8.43,1,1,0
 user2,ProjectInspector,pexpect,4.7.0,1,1,0
 user2,ProjectInspector,pickleshare,0.7.5,1,1,0
-user2,ProjectInspector,pip,19.1,1,1,0
+user2,ProjectInspector,pip,19.1.1,1,1,0
 user2,ProjectInspector,pixman,0.38.0,1,1,0
 user2,ProjectInspector,prometheus_client,0.6.0,1,0,0
 user2,ProjectInspector,prompt_toolkit,2.0.9,1,1,0
 user2,ProjectInspector,ptyprocess,0.6.0,1,1,0
-user2,ProjectInspector,pygments,2.3.1,1,1,0
+user2,ProjectInspector,pygments,2.4.0,1,1,0
 user2,ProjectInspector,pyrsistent,0.14.11,1,0,0
 user2,ProjectInspector,python,3.7.3,1,1,1
 user2,ProjectInspector,python-dateutil,2.8.0,1,1,0
@@ -879,7 +881,7 @@ user2,ProjectInspector,tornado,6.0.2,1,1,0
 user2,ProjectInspector,traitlets,4.3.2,1,1,0
 user2,ProjectInspector,wcwidth,0.1.7,1,1,0
 user2,ProjectInspector,webencodings,0.5.1,1,0,0
-user2,ProjectInspector,wheel,0.33.1,1,1,0
+user2,ProjectInspector,wheel,0.33.4,1,1,0
 user2,ProjectInspector,xz,5.2.4,1,1,0
 user2,ProjectInspector,zeromq,4.2.5,1,1,0
 user2,ProjectInspector,zlib,1.2.11,1,1,0
@@ -1074,7 +1076,7 @@ user2,ScriptsOnly,pexpect,4.7.0,1,0,0
 user2,ScriptsOnly,pickleshare,0.7.5,2,0,0
 user2,ScriptsOnly,pillow,5.4.1,1,0,0
 user2,ScriptsOnly,pip,19.0.3,1,1,0
-user2,ScriptsOnly,pip,19.1,1,1,0
+user2,ScriptsOnly,pip,19.1.1,1,1,0
 user2,ScriptsOnly,pixman,0.38.0,1,1,0
 user2,ScriptsOnly,pkginfo,1.5.0.1,1,0,0
 user2,ScriptsOnly,pluggy,0.9.0,1,0,0
@@ -1091,7 +1093,8 @@ user2,ScriptsOnly,pycparser,2.19,1,0,0
 user2,ScriptsOnly,pycrypto,2.6.1,1,0,0
 user2,ScriptsOnly,pycurl,7.43.0.2,1,0,0
 user2,ScriptsOnly,pyflakes,2.1.1,1,0,0
-user2,ScriptsOnly,pygments,2.3.1,2,0,0
+user2,ScriptsOnly,pygments,2.3.1,1,0,0
+user2,ScriptsOnly,pygments,2.4.0,1,0,0
 user2,ScriptsOnly,pylint,2.3.1,1,0,0
 user2,ScriptsOnly,pyodbc,4.0.26,1,0,0
 user2,ScriptsOnly,pyopenssl,19.0.0,1,0,0
@@ -1309,7 +1312,8 @@ user2,ScriptsOnly,urllib3,1.24.1,1,0,0
 user2,ScriptsOnly,wcwidth,0.1.7,2,0,0
 user2,ScriptsOnly,webencodings,0.5.1,2,0,0
 user2,ScriptsOnly,werkzeug,0.14.1,1,0,0
-user2,ScriptsOnly,wheel,0.33.1,2,2,0
+user2,ScriptsOnly,wheel,0.33.1,1,1,0
+user2,ScriptsOnly,wheel,0.33.4,1,1,0
 user2,ScriptsOnly,widgetsnbextension,3.4.2,1,0,0
 user2,ScriptsOnly,wrapt,1.11.1,1,0,0
 user2,ScriptsOnly,wurlitzer,1.0.2,1,0,0

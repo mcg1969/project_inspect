@@ -129,25 +129,28 @@ def get_eggs(sp_dir):
                  'modules': {'python': set(), 'r': set()}}
         results[fn] = pdata
         for dist in dists:
-            if pdata['name'] is None:
-                pdata['name'] = dist.project_name
-                pdata['version'] = dist.version or '<dev>'
-            pdata['depends'].update(r.name for r in dist.requires())
-            sources = 'RECORD' if dist.has_metadata('RECORD') else 'SOURCES.txt'
-            if dist.has_metadata(sources) and dist.has_metadata('top_level.txt'):
-                sources = list(map(str.strip, dist.get_metadata(sources).splitlines()))
-                top_level = list(map(str.strip, dist.get_metadata('top_level.txt').splitlines()))
-                for top in top_level:
-                    top_s = top + '/'
-                    for src in sources:
-                            src = src.split(',', 1)[0]
-                            if src.endswith('__init__.py'):
-                                src = dirname(src)
-                            elif src.endswith(('.py', '.so')):
-                                src = src[:-3]
-                            else:
-                                continue
-                            pdata['modules']['python'].add(src.replace('/', '.'))
+            try:
+                if pdata['name'] is None:
+                    pdata['name'] = dist.project_name
+                    pdata['version'] = dist.version or '<dev>'
+                pdata['depends'].update(r.name for r in dist.requires())
+                sources = 'RECORD' if dist.has_metadata('RECORD') else 'SOURCES.txt'
+                if dist.has_metadata(sources) and dist.has_metadata('top_level.txt'):
+                    sources = list(map(str.strip, dist.get_metadata(sources).splitlines()))
+                    top_level = list(map(str.strip, dist.get_metadata('top_level.txt').splitlines()))
+                    for top in top_level:
+                        top_s = top + '/'
+                        for src in sources:
+                                src = src.split(',', 1)[0]
+                                if src.endswith('__init__.py'):
+                                    src = dirname(src)
+                                elif src.endswith(('.py', '.so')):
+                                    src = src[:-3]
+                                else:
+                                    continue
+                                pdata['modules']['python'].add(src.replace('/', '.'))
+            except Exception as e:
+                logger.warning('Unexpected error processing {}:\n{}'.format(fn, str(e)))
         if not pdata['name']:
             name, version = fn.rsplit('.', 1)[0], '<dev>'
             if fn.endswith('.dist-info'):
