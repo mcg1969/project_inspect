@@ -210,7 +210,7 @@ user1,pickleshare,0.7.5,2,3,1,0
 user1,pillow,5.4.1,1,1,0,0
 user1,pillow,6.0.0,1,1,1,0
 user1,pip,19.0.3,1,1,1,0
-user1,pip,19.1,2,2,2,0
+user1,pip,19.1.1,2,2,2,0
 user1,pixman,0.38.0,2,2,2,0
 user1,pkginfo,1.5.0.1,1,1,0,0
 user1,pluggy,0.9.0,1,1,0,0
@@ -229,7 +229,8 @@ user1,pycparser,2.19,1,1,0,0
 user1,pycrypto,2.6.1,1,1,0,0
 user1,pycurl,7.43.0.2,1,1,0,0
 user1,pyflakes,2.1.1,1,1,0,0
-user1,pygments,2.3.1,2,3,1,0
+user1,pygments,2.3.1,1,1,0,0
+user1,pygments,2.4.0,2,2,1,0
 user1,pylint,2.3.1,1,1,0,0
 user1,pyodbc,4.0.26,1,1,0,0
 user1,pyopenssl,19.0.0,1,1,0,0
@@ -258,7 +259,8 @@ user1,pyzmq,17.1.2,2,2,1,0
 user1,pyzmq,18.0.0,1,1,0,0
 user1,qt,5.9.7,2,2,0,0
 user1,qtawesome,0.5.7,1,1,0,0
-user1,qtconsole,4.4.3,2,2,0,0
+user1,qtconsole,4.4.3,1,1,0,0
+user1,qtconsole,4.4.4,1,1,0,0
 user1,qtpy,1.7.0,1,1,0,0
 user1,r-abind,1.4_5,2,2,0,0
 user1,r-assertthat,0.2.0,2,2,1,0
@@ -408,7 +410,7 @@ user1,readline,7.0,2,3,3,0
 user1,requests,2.21.0,1,1,0,0
 user1,rope,0.12.0,1,1,0,0
 user1,ruamel.ordereddict,0.4.13,1,1,1,1
-user1,ruamel.yaml,0.15.94,1,1,1,1
+user1,ruamel.yaml,0.15.95,1,1,1,1
 user1,ruamel_yaml,0.15.46,1,1,0,0
 user1,scandir,1.10.0,1,1,1,0
 user1,scikit-image,0.14.2,1,1,0,0
@@ -457,7 +459,8 @@ user1,urllib3,1.24.1,1,1,0,0
 user1,wcwidth,0.1.7,2,3,1,0
 user1,webencodings,0.5.1,2,3,0,0
 user1,werkzeug,0.14.1,1,1,0,0
-user1,wheel,0.33.1,2,3,3,0
+user1,wheel,0.33.1,1,1,1,0
+user1,wheel,0.33.4,2,2,2,0
 user1,widgetsnbextension,3.4.2,2,2,0,0
 user1,wrapt,1.11.1,1,1,0,0
 user1,wurlitzer,1.0.2,1,1,0,0
@@ -666,7 +669,7 @@ user2,pexpect,4.7.0,2,2,1,0
 user2,pickleshare,0.7.5,2,3,1,0
 user2,pillow,5.4.1,1,1,0,0
 user2,pip,19.0.3,1,1,1,0
-user2,pip,19.1,2,2,2,0
+user2,pip,19.1.1,2,2,2,0
 user2,pixman,0.38.0,2,2,2,0
 user2,pkginfo,1.5.0.1,1,1,0,0
 user2,pluggy,0.9.0,1,1,0,0
@@ -683,7 +686,8 @@ user2,pycparser,2.19,1,1,0,0
 user2,pycrypto,2.6.1,1,1,0,0
 user2,pycurl,7.43.0.2,1,1,0,0
 user2,pyflakes,2.1.1,1,1,0,0
-user2,pygments,2.3.1,2,3,1,0
+user2,pygments,2.3.1,1,1,0,0
+user2,pygments,2.4.0,2,2,1,0
 user2,pylint,2.3.1,1,1,0,0
 user2,pyodbc,4.0.26,1,1,0,0
 user2,pyopenssl,19.0.0,1,1,0,0
@@ -909,7 +913,8 @@ user2,urllib3,1.24.1,1,1,0,0
 user2,wcwidth,0.1.7,2,3,1,0
 user2,webencodings,0.5.1,2,3,0,0
 user2,werkzeug,0.14.1,1,1,0,0
-user2,wheel,0.33.1,2,3,3,0
+user2,wheel,0.33.1,1,1,1,0
+user2,wheel,0.33.4,2,2,2,0
 user2,widgetsnbextension,3.4.2,1,1,0,0
 user2,wrapt,1.11.1,1,1,0,0
 user2,wurlitzer,1.0.2,1,1,0,0
