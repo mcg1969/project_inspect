@@ -336,8 +336,9 @@ def build_project_inventory(owner_name, project_name=None, project_root=None, re
         while True:
             n_pkgs = len(required)
             for pkg in list(required):
-                deps = packages.get(pkg, {}).get('depends', set)
-                required.update(deps.intersection(packages))
+                deps = packages.get(pkg, {}).get('depends')
+                if deps:
+                    required.update(deps.intersection(packages))
             if len(required) == n_pkgs:
                 break
         bases = {}
