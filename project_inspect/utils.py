@@ -45,7 +45,7 @@ def load_file(fpath):
     if fpath.endswith(('.ipynb', '.json')):
         try:
             result = json.loads(ndata)
-        except json.decoder.JSONDecodeError:
+        except:
             logger.error('{}: INVALID JSON'.format(fpath))
             return None
     else:
