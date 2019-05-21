@@ -180,7 +180,7 @@ def find_project_imports(project_home):
         # or the "envs" or "examples" directories
         if root != project_home and 'envs' in dirs:
             logger.warning(_wrap('Nested environment store detected: {}/envs'.format(root)))
-            dirs.remove(envs)
+            dirs.remove('envs')
         dirs[:] = [file for file in dirs if not file.startswith('.')
                    and not exists(join(root, file, '__init__.py'))
                    and (root != project_home or file not in ('envs', 'pkgs', 'examples'))]
