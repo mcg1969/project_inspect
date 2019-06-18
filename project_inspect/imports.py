@@ -130,9 +130,7 @@ def find_notebook_imports(ndata):
 
 
 def find_file_imports(fpath, submodules=False, locals=False):
-    if not isfile(fpath):
-        raise RuntimeError('Not a file: {}'.format(fpath))
-    if not fpath.endswith(('.ipynb', '.py', '.R')):
+    if not isfile(fpath) or not fpath.endswith(('.ipynb', '.py', '.R')):
         return set(), None
     data = load_file(fpath)
     if data is None:
