@@ -352,21 +352,24 @@ def build_project_inventory(owner_name, project_name=None, project_root=None, re
         extra = set(packages) - required
         required -= imported
         for pkg in sorted(imported):
-            pdata = packages[pkg]
-            records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], True, True, ''))
+            if pkg in packages:
+                pdata = packages[pkg]
+                records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], True, True, ''))
         for pkg in sorted(required):
-            pdata = packages[pkg]
-            # If a package depends on another package transitively through one of the base
-            # packages (python, r-base), we don't want it to show up in this list. This
-            # reduces the noise in this list considerably.
-            revs = all_children(packages, pdata['reverse'], 'reverse', bases)
-            if not revs:
-                revs = all_children(packages, pdata['reverse'], 'reverse', imported)
-            revs = ', '.join(sorted(revs))
-            records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], True, False, revs))
+            if pkg in packages:
+                pdata = packages[pkg]
+                # If a package depends on another package transitively through one of the base
+                # packages (python, r-base), we don't want it to show up in this list. This
+                # reduces the noise in this list considerably.
+                revs = all_children(packages, pdata['reverse'], 'reverse', bases)
+                if not revs:
+                    revs = all_children(packages, pdata['reverse'], 'reverse', imported)
+                revs = ', '.join(sorted(revs))
+                records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], True, False, revs))
         for pkg in sorted(extra):
-            pdata = packages[pkg]
-            records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], False, False, ''))
+            if pkg in packages:
+                pdata = packages[pkg]
+                records.append((owner_name, project_name, envname, pkg, pdata['version'], pdata['build'], False, False, ''))
     return records if records_only else _build_df(records)
 
 
