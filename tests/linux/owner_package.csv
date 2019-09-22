@@ -1,4 +1,5 @@
 owner,package,n_projects,n_environments,n_required,n_requested
+user1,_libgcc_mutex,2,3,3,0
 user1,_r-mutex,2,2,2,0
 user1,alabaster,1,1,0,0
 user1,anaconda,1,1,0,0
@@ -107,7 +108,9 @@ user1,jdcal,1,1,0,0
 user1,jedi,1,2,0,0
 user1,jeepney,1,1,0,0
 user1,jinja2,2,3,1,0
+user1,joblib,1,1,0,0
 user1,jpeg,2,3,2,0
+user1,json5,1,1,0,0
 user1,jsonschema,2,3,0,0
 user1,jupyter,2,2,0,0
 user1,jupyter_client,2,3,1,0
@@ -152,6 +155,7 @@ user1,mkl,1,1,0,0
 user1,mkl-service,1,1,0,0
 user1,mkl_fft,1,1,0,0
 user1,mkl_random,1,1,0,0
+user1,mock,1,1,0,0
 user1,more-itertools,1,1,0,0
 user1,mpc,1,1,0,0
 user1,mpfr,1,1,0,0
@@ -382,6 +386,7 @@ user1,requests,1,1,0,0
 user1,rope,1,1,0,0
 user1,ruamel.ordereddict,1,1,1,1
 user1,ruamel.yaml,1,1,1,1
+user1,ruamel.yaml.clib,1,1,1,1
 user1,ruamel_yaml,1,1,0,0
 user1,scandir,1,1,1,0
 user1,scikit-image,1,1,0,0
@@ -402,6 +407,12 @@ user1,sortedcontainers,1,1,0,0
 user1,soupsieve,1,1,0,0
 user1,sphinx,1,1,0,0
 user1,sphinxcontrib,1,1,0,0
+user1,sphinxcontrib-applehelp,1,1,0,0
+user1,sphinxcontrib-devhelp,1,1,0,0
+user1,sphinxcontrib-htmlhelp,1,1,0,0
+user1,sphinxcontrib-jsmath,1,1,0,0
+user1,sphinxcontrib-qthelp,1,1,0,0
+user1,sphinxcontrib-serializinghtml,1,1,0,0
 user1,sphinxcontrib-websupport,1,1,0,0
 user1,spyder,1,1,0,0
 user1,spyder-kernels,1,1,0,0
@@ -411,7 +422,7 @@ user1,statsmodels,2,2,1,1
 user1,subprocess32,1,1,1,0
 user1,suitesparse,1,1,1,0
 user1,sympy,1,1,0,0
-user1,tbb,1,1,1,0
+user1,tbb,2,2,1,0
 user1,tblib,1,1,0,0
 user1,terminado,2,3,0,0
 user1,testpath,2,3,0,0
@@ -441,6 +452,7 @@ user1,zict,1,1,0,0
 user1,zipp,1,1,0,0
 user1,zlib,2,3,3,0
 user1,zstd,2,3,2,0
+user2,_libgcc_mutex,2,3,3,0
 user2,_r-mutex,2,2,2,0
 user2,alabaster,1,1,0,0
 user2,anaconda,1,1,0,0
@@ -539,7 +551,9 @@ user2,jdcal,1,1,0,0
 user2,jedi,2,3,1,0
 user2,jeepney,1,1,0,0
 user2,jinja2,2,3,1,0
+user2,joblib,1,1,0,0
 user2,jpeg,2,3,2,0
+user2,json5,1,1,0,0
 user2,jsonschema,2,3,0,0
 user2,jupyter,1,1,0,0
 user2,jupyter_client,2,3,1,0
@@ -583,6 +597,7 @@ user2,mkl,1,1,0,0
 user2,mkl-service,1,1,0,0
 user2,mkl_fft,1,1,0,0
 user2,mkl_random,1,1,0,0
+user2,mock,1,1,0,0
 user2,more-itertools,1,1,0,0
 user2,mpc,1,1,0,0
 user2,mpfr,1,1,0,0
@@ -670,8 +685,8 @@ user2,r-backports,1,1,0,0
 user2,r-base,2,2,2,2
 user2,r-base64enc,2,2,2,0
 user2,r-bh,2,2,1,0
-user2,r-bindr,2,2,1,0
-user2,r-bindrcpp,2,2,1,0
+user2,r-bindr,1,1,0,0
+user2,r-bindrcpp,1,1,0,0
 user2,r-bit,1,1,1,0
 user2,r-bit64,1,1,1,0
 user2,r-blob,1,1,1,0
@@ -792,8 +807,8 @@ user2,r-shiny,1,1,0,0
 user2,r-sourcetools,1,1,0,0
 user2,r-spatial,1,1,0,0
 user2,r-squarem,1,1,0,0
-user2,r-stringi,2,2,1,0
-user2,r-stringr,2,2,1,0
+user2,r-stringi,1,1,0,0
+user2,r-stringr,1,1,0,0
 user2,r-survival,1,1,0,0
 user2,r-testthat,1,1,0,0
 user2,r-tibble,2,2,1,0
@@ -837,6 +852,12 @@ user2,sortedcontainers,1,1,0,0
 user2,soupsieve,1,1,0,0
 user2,sphinx,1,1,0,0
 user2,sphinxcontrib,1,1,0,0
+user2,sphinxcontrib-applehelp,1,1,0,0
+user2,sphinxcontrib-devhelp,1,1,0,0
+user2,sphinxcontrib-htmlhelp,1,1,0,0
+user2,sphinxcontrib-jsmath,1,1,0,0
+user2,sphinxcontrib-qthelp,1,1,0,0
+user2,sphinxcontrib-serializinghtml,1,1,0,0
 user2,sphinxcontrib-websupport,1,1,0,0
 user2,spyder,1,1,0,0
 user2,spyder-kernels,1,1,0,0
@@ -844,6 +865,7 @@ user2,sqlalchemy,1,1,0,0
 user2,sqlite,2,3,3,0
 user2,statsmodels,1,1,0,0
 user2,sympy,1,1,0,0
+user2,tbb,1,1,0,0
 user2,tblib,1,1,0,0
 user2,terminado,2,3,0,0
 user2,testpath,2,3,0,0
