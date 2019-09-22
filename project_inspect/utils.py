@@ -2,9 +2,6 @@ import logging
 import functools
 import json
 import os
-import traceback
-
-from . import config
 
 from textwrap import TextWrapper
 
@@ -38,12 +35,14 @@ def shortpath(fpath):
     return fpath
 
 
-from textwrap import TextWrapper
 wrapper = TextWrapper()
 wrapper.initial_indent = '    '
 wrapper.subsequent_indent = '      '
+
+
 def wrap(t):
     return '\n'.join(wrapper.wrap(t))
+
 
 def warn_file(fpath, msg, exc=None):
     if exc is not None:
@@ -66,7 +65,7 @@ def load_file(fpath):
     if fpath.endswith(('.ipynb', '.json')):
         try:
             result = json.loads(ndata)
-        except:
+        except Exception:
             if last_path != fpath:
                 logger.error('{}: INVALID JSON'.format(shortpath(fpath)))
                 last_path = fpath

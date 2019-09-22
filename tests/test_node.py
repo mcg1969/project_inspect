@@ -1,7 +1,7 @@
 from project_inspect import config, project
 
 import pandas as pd
-from os.path import dirname, join, abspath
+from os.path import dirname, join
 
 import sys
 import pytest
@@ -98,13 +98,14 @@ def test_cli_filter(master_df):
     assert 'user2/NoEnvs/cannot_read.py: CANNOT READ' in errp.decode()
     from io import BytesIO
     df = _read_csv(BytesIO(outp))
-    filtered_df = master_df[(master_df.package=='xlrd')|(master_df.package=='pytest')].reset_index(drop=True)
+    filtered_df = master_df[(master_df.package == 'xlrd') |
+                            (master_df.package == 'pytest')].reset_index(drop=True)
     assert df.equals(filtered_df)
 
 
 @pytest.mark.parametrize('project_group, package_group',
-    itertools.product(('all', 'node', 'owner', 'project', 'environment'),
-                      ('all', 'package', 'version')))
+                         itertools.product(('all', 'node', 'owner', 'project', 'environment'),
+                                           ('all', 'package', 'version')))
 def test_summary(master_df, project_group, package_group):
     def _clean(df):
         df = df[df['requested'] if 'requested' in df.columns else df['n_requested'] != 0]
@@ -123,4 +124,3 @@ def test_summary(master_df, project_group, package_group):
         print(summary)
         print(expected)
     assert summary.equals(expected)
-

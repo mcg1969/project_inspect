@@ -1,16 +1,14 @@
 from . import config
 from .environments import environment_by_prefix, kernel_name_to_prefix, modules_to_packages
-from .imports import find_python_imports, find_r_imports
 
 from .utils import logger, warn_file, load_file, shortpath, set_log_root, wrap
 from .version import VersionSpec
 
-from os.path import join, isdir, isfile, basename, dirname, exists, abspath
+from os.path import join, isdir, basename, dirname, exists, abspath
 from glob import glob
 
 import os
 import re
-import json
 import pandas as pd
 import numpy as np
 
@@ -19,12 +17,11 @@ def visible_project_environments(project_home):
     project_home = join(project_home, 'envs', '')
     anaconda_root = join(config.WAKARI_ROOT, 'anaconda')
     anaconda_envs = join(anaconda_root, 'envs', '')
-    test_globs = [
-            (join(project_home, 'default'), '{}'),
-            (join(project_home, '*'), '{}'),
-            (join(anaconda_envs, 'default'), 'anaconda:{}'),
-            (join(anaconda_envs, '*'), 'anaconda:{}'),
-            (anaconda_root, 'anaconda:root')]
+    test_globs = [(join(project_home, 'default'), '{}'),
+                  (join(project_home, '*'), '{}'),
+                  (join(anaconda_envs, 'default'), 'anaconda:{}'),
+                  (join(anaconda_envs, '*'), 'anaconda:{}'),
+                  (anaconda_root, 'anaconda:root')]
     envs = []
     for test_glob, sname_format in test_globs:
         for file in sorted(glob(join(test_glob, 'conda-meta'))):
@@ -41,7 +38,7 @@ def find_notebook_metadata(fpath):
     try:
         kspec = ndata['metadata']['kernelspec']
         return kspec['language'].lower(), kspec['name']
-    except:
+    except Exception:
         return None, None
 
 
@@ -114,14 +111,13 @@ def sort_candidates(depends):
 def find_project_imports(project_home):
     project_name = basename(project_home)
     project_user = basename(dirname(project_home))
-    project_envs = join(project_home, 'envs', '')
     logger.info('Scanning project: {}/{}'.format(project_user, project_name))
-    
+
     all_envs = {}
     for prefix, shortname in visible_project_environments(project_home):
         all_envs[prefix] = {
-            'shortname': shortname, 
-            'requested': set(), 
+            'shortname': shortname,
+            'requested': set(),
             'missing': {}}
     if all_envs:
         logger.info('  {} visible environments:'.format(len(all_envs)))
@@ -137,6 +133,7 @@ def find_project_imports(project_home):
 
     local_envs = {}
     local_depends = {}
+
     def _touch(pkg, env):
         if pkg not in local_envs:
             local_envs[pkg] = set()
@@ -145,9 +142,8 @@ def find_project_imports(project_home):
             # Dependencies must live in this env, too
             for dep in local_depends.get(pkg):
                 _touch(dep, env)
-    
+
     def _process(fpath, env_prefix, language, file_requests, file_missing):
-        fdir = dirname(fpath)
         fbase = fpath[root_len:]
         if env_prefix is None:
             logger.info('  {}: empty notebook/package'.format(fbase))
@@ -169,7 +165,7 @@ def find_project_imports(project_home):
         if file_missing:
             logger.info(wrap('unresolved: {}'.format(', '.join(sorted(file_missing)))))
             envrec['missing'].setdefault(language, set()).update(file_missing)
-            
+
     root_len = len(project_home.rstrip('/')) + 1
     for root, dirs, files in os.walk(project_home, topdown=True):
         # Do not descend into dotted directories, Python package directories,
@@ -177,15 +173,15 @@ def find_project_imports(project_home):
         if root != project_home and 'envs' in dirs:
             warn_file(join(root, 'envs'), 'NESTED ENVIRONMENTS')
             dirs.remove('envs')
-        dirs[:] = [file for file in dirs if not file.startswith('.')
-                   and not exists(join(root, file, '__init__.py'))
-                   and (root != project_home or file not in ('envs', 'pkgs', 'examples'))]
-        
+        dirs[:] = [file for file in dirs if not file.startswith('.') and
+                   not exists(join(root, file, '__init__.py')) and
+                   (root != project_home or file not in ('envs', 'pkgs', 'examples'))]
+
         local_depends.clear()
         for pkg, pdata in environment_by_prefix('@', root)['packages'].items():
             local_depends[pkg[2:]] = set(dep[2:] for dep in pdata['depends'])
         scan_targets = sort_candidates(local_depends)
-        
+
         for file in scan_targets:
             fpath = join(root, file)
             envs = local_envs.get(file) or all_envs
@@ -194,7 +190,7 @@ def find_project_imports(project_home):
                 _process(fpath, env_prefix, language, t_requests, t_missing)
             except Exception as e:
                 warn_file(fpath, 'UNEXPECTED ERROR', e)
-            
+
     if any(envrec['requested'] or envrec['missing'] for envrec in all_envs.values()):
         logger.info('Summary:')
         for prefix, envrec in all_envs.items():
@@ -203,7 +199,7 @@ def find_project_imports(project_home):
                 logger.info(wrap('packages: {}'.format(', '.join(sorted(envrec['requested'])))))
             for language, mset in envrec['missing'].items():
                 logger.info(wrap('missing {} imports: {}'.format(language, ', '.join(sorted(mset)))))
-            
+
     return all_envs
 
 
@@ -213,7 +209,7 @@ def all_children(packages, children, field, filter=None):
     while nresult != len(result):
         nresult = len(result)
         for pkg in list(result):
-            if filter is None or pkg not in filter: 
+            if filter is None or pkg not in filter:
                 result.update(packages.get(pkg, {}).get(field, ()))
     if filter is not None:
         result.intersection_update(filter)
@@ -271,7 +267,6 @@ def summarize_data(data, level):
         n_owners = len(data['owner'].drop_duplicates())
         n_projects = len(data[['owner', 'project']].drop_duplicates())
         n_envs = len(data[['owner', 'project', 'environment']].drop_duplicates())
-        packages = data[['package', 'version'] if package_group == 'version' else ['package']]
         n_required = sum(data.required)
         n_requested = sum(data.requested)
         n_python = sum(data.package == 'python')
