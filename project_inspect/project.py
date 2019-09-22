@@ -2,11 +2,10 @@ from . import config
 from .environments import environment_by_prefix, kernel_name_to_prefix, modules_to_packages
 from .imports import find_python_imports, find_r_imports
 
-from .utils import logger, load_file, shortpath, set_log_root
+from .utils import logger, warn_file, load_file, shortpath, set_log_root, wrap
 from .version import VersionSpec
 
 from os.path import join, isdir, isfile, basename, dirname, exists, abspath
-from textwrap import TextWrapper
 from glob import glob
 
 import os
@@ -55,16 +54,19 @@ def find_used_packages(fpath, project_home, prefixes):
         language = 'r'
     elif fpath.endswith('.ipynb'):
         language, kspec = find_notebook_metadata(fpath)
-        if language is None:
+        if language not in ('python', 'r'):
+            if language is not None:
+                warn_file(fpath, 'UNSUPPORTED LANGUAGE: {}'.format(language))
             return (None, None, None, None)
         preferred = kernel_name_to_prefix(project_home, kspec)
         if preferred is None:
-            logger.warning("Unexpected kernel name: {}\n  file: {}".format(kspec, fpath))
+            warn_file(fpath, 'UNEXPECTED KERNEL: {}'.format(kspec))
         elif not isdir(join(preferred, 'conda-meta')):
-            logger.warning("Missing or invalid kernel environment: {}\n  file: {}\n  directory: {}".format(kspec, fpath, preferred))
+            warn_file(fpath, 'INVALID KERNEL: {}'.format(kspec))
         else:
             prefixes = [preferred]
     else:
+        warn_file(fpath, 'SKIPPING')
         return (None, None, None, None)
     package_name = './' + basename(fpath)
     fdir = dirname(fpath)
@@ -115,12 +117,6 @@ def find_project_imports(project_home):
     project_envs = join(project_home, 'envs', '')
     logger.info('Scanning project: {}/{}'.format(project_user, project_name))
     
-    wrapper = TextWrapper()
-    wrapper.initial_indent = '    '
-    wrapper.subsequent_indent = '      '
-    def _wrap(t):
-        return '\n'.join(wrapper.wrap(t))
-    
     all_envs = {}
     for prefix, shortname in visible_project_environments(project_home):
         all_envs[prefix] = {
@@ -163,15 +159,15 @@ def find_project_imports(project_home):
             (local_imports if pkg.startswith('./') else env_imports).add(pkg)
         logger.info('  {}: {}, environment: {}'.format(fbase, language, envrec['shortname']))
         if env_imports:
-            logger.info(_wrap('packages: {}'.format(', '.join(sorted(env_imports)))))
+            logger.info(wrap('packages: {}'.format(', '.join(sorted(env_imports)))))
             envrec['requested'].update(env_imports)
         if local_imports:
             local_imports = sorted(pkg[2:] for pkg in local_imports)
-            logger.info(_wrap('local imports: {}'.format(', '.join(local_imports))))
+            logger.info(wrap('local imports: {}'.format(', '.join(local_imports))))
             for pkg in local_imports:
                 _touch(pkg, env_prefix)
         if file_missing:
-            logger.info(_wrap('unresolved: {}'.format(', '.join(sorted(file_missing)))))
+            logger.info(wrap('unresolved: {}'.format(', '.join(sorted(file_missing)))))
             envrec['missing'].setdefault(language, set()).update(file_missing)
             
     root_len = len(project_home.rstrip('/')) + 1
@@ -179,7 +175,7 @@ def find_project_imports(project_home):
         # Do not descend into dotted directories, Python package directories,
         # or the "envs" or "examples" directories
         if root != project_home and 'envs' in dirs:
-            logger.warning(_wrap('Nested environment store detected: {}/envs'.format(root)))
+            warn_file(join(root, 'envs'), 'NESTED ENVIRONMENTS')
             dirs.remove('envs')
         dirs[:] = [file for file in dirs if not file.startswith('.')
                    and not exists(join(root, file, '__init__.py'))
@@ -197,16 +193,16 @@ def find_project_imports(project_home):
                 env_prefix, language, t_requests, t_missing = find_used_packages(fpath, project_home, envs)
                 _process(fpath, env_prefix, language, t_requests, t_missing)
             except Exception as e:
-                logger.warning(_wrap('Unexpected error processing {}:\n  - {}'.format(fpath, str(e))))
+                warn_file(fpath, 'UNEXPECTED ERROR', e)
             
     if any(envrec['requested'] or envrec['missing'] for envrec in all_envs.values()):
         logger.info('Summary:')
         for prefix, envrec in all_envs.items():
             if envrec['requested']:
                 logger.info('  {} ({}):'.format(envrec['shortname'], shortpath(prefix)))
-                logger.info(_wrap('packages: {}'.format(', '.join(sorted(envrec['requested'])))))
+                logger.info(wrap('packages: {}'.format(', '.join(sorted(envrec['requested'])))))
             for language, mset in envrec['missing'].items():
-                logger.info(_wrap('missing {} imports: {}'.format(language, ', '.join(sorted(mset)))))
+                logger.info(wrap('missing {} imports: {}'.format(language, ', '.join(sorted(mset)))))
             
     return all_envs
 
@@ -325,7 +321,7 @@ def build_project_inventory(owner_name, project_name=None, project_root=None, re
         if project_root is None:
             project_root = config.PROJECT_ROOT
         project_home = join(abspath(project_root), owner_name, project_name)
-    set_log_root(project_home)
+    set_log_root(dirname(dirname(project_home)))
     project_envs = join(project_home, 'envs', '')
     all_envs = find_project_imports(project_home)
     records = []
@@ -382,7 +378,7 @@ def build_owner_inventory(owner_name, project_root=None, records_only=False):
         owner_home = join(abspath(project_root), owner_name)
     records = []
     owner_home = abspath(owner_home)
-    set_log_root(owner_home)
+    set_log_root(dirname(owner_home))
     for projectrc in sorted(glob(join(owner_home, '*', '.projectrc'))):
         records.extend(build_project_inventory(dirname(projectrc), records_only=True))
     return records if records_only else _build_df(records)

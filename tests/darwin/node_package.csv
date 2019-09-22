@@ -106,7 +106,9 @@ jbig,2,2,2,0,0
 jdcal,2,2,2,0,0
 jedi,2,3,5,1,0
 jinja2,2,4,6,2,0
+joblib,2,2,2,0,0
 jpeg,2,4,6,4,0
+json5,2,2,2,0,0
 jsonschema,2,4,6,0,0
 jupyter,2,3,3,0,0
 jupyter_client,2,4,6,2,0
@@ -120,6 +122,8 @@ krb5,2,4,6,4,0
 lazy-object-proxy,2,2,2,0,0
 ld64,2,4,4,4,0
 libarchive,2,2,2,0,0
+libblas,2,2,2,2,0
+libcblas,2,2,2,2,0
 libcurl,2,4,6,4,0
 libcxx,2,4,6,6,0
 libcxxabi,2,4,6,6,0
@@ -127,6 +131,8 @@ libedit,2,4,6,6,0
 libffi,2,4,6,6,0
 libgfortran,2,4,6,4,0
 libiconv,2,4,6,4,0
+liblapack,2,2,2,2,0
+liblapacke,2,2,2,2,0
 liblief,2,2,2,0,0
 libopenblas,2,4,4,2,0
 libpng,2,4,6,4,0
@@ -137,7 +143,7 @@ libxml2,2,4,6,4,0
 libxslt,2,2,2,0,0
 llvm,2,4,4,4,0
 llvm-lto-tapi,2,4,4,4,0
-llvm-openmp,2,4,4,4,0
+llvm-openmp,2,4,6,4,0
 llvmlite,2,2,2,0,0
 locket,2,2,2,0,0
 lxml,2,2,2,0,0
@@ -153,6 +159,7 @@ mkl,2,2,2,0,0
 mkl-service,2,2,2,0,0
 mkl_fft,2,2,2,0,0
 mkl_random,2,2,2,0,0
+mock,2,2,2,0,0
 more-itertools,2,2,2,0,0
 mpc,2,2,2,0,0
 mpfr,2,2,2,0,0
@@ -240,8 +247,8 @@ r-backports,2,3,3,0,0
 r-base,2,4,4,4,4
 r-base64enc,2,4,4,4,0
 r-bh,2,4,4,2,0
-r-bindr,2,4,4,2,0
-r-bindrcpp,2,4,4,2,0
+r-bindr,2,3,3,1,0
+r-bindrcpp,2,3,3,1,0
 r-bit,1,1,1,1,0
 r-bit64,1,1,1,1,0
 r-blob,1,1,1,1,0
@@ -362,8 +369,8 @@ r-shiny,2,3,3,0,0
 r-sourcetools,2,3,3,0,0
 r-spatial,2,3,3,0,0
 r-squarem,2,3,3,0,0
-r-stringi,2,4,4,2,0
-r-stringr,2,4,4,2,0
+r-stringi,2,3,3,1,0
+r-stringr,2,3,3,1,0
 r-survival,2,3,3,0,0
 r-testthat,2,3,3,0,0
 r-tibble,2,4,4,2,0
@@ -390,6 +397,7 @@ rope,2,2,2,0,0
 rpy2,1,1,1,1,1
 ruamel.ordereddict,1,1,1,1,1
 ruamel.yaml,1,1,1,1,1
+ruamel.yaml.clib,1,1,1,1,1
 ruamel_yaml,2,2,2,0,0
 scandir,1,1,1,1,0
 scikit-image,2,2,2,0,0
@@ -409,6 +417,12 @@ sortedcontainers,2,2,2,0,0
 soupsieve,2,2,2,0,0
 sphinx,2,2,2,0,0
 sphinxcontrib,2,2,2,0,0
+sphinxcontrib-applehelp,2,2,2,0,0
+sphinxcontrib-devhelp,2,2,2,0,0
+sphinxcontrib-htmlhelp,2,2,2,0,0
+sphinxcontrib-jsmath,2,2,2,0,0
+sphinxcontrib-qthelp,2,2,2,0,0
+sphinxcontrib-serializinghtml,2,2,2,0,0
 sphinxcontrib-websupport,2,2,2,0,0
 spyder,2,2,2,0,0
 spyder-kernels,2,2,2,0,0
@@ -418,7 +432,7 @@ statsmodels,2,3,3,1,1
 subprocess32,1,1,1,1,0
 suitesparse,1,1,1,1,0
 sympy,2,2,2,0,0
-tbb,1,1,1,1,0
+tbb,2,3,3,1,0
 tblib,2,2,2,0,0
 terminado,2,4,6,0,0
 testpath,2,4,6,0,0

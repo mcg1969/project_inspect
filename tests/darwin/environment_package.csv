@@ -60,6 +60,8 @@ user1,Portfolio,default,jupyter_core,1,0
 user1,Portfolio,default,kiwisolver,1,0
 user1,Portfolio,default,krb5,1,0
 user1,Portfolio,default,ld64,1,0
+user1,Portfolio,default,libblas,1,0
+user1,Portfolio,default,libcblas,1,0
 user1,Portfolio,default,libcurl,1,0
 user1,Portfolio,default,libcxx,1,0
 user1,Portfolio,default,libcxxabi,1,0
@@ -67,6 +69,8 @@ user1,Portfolio,default,libedit,1,0
 user1,Portfolio,default,libffi,1,0
 user1,Portfolio,default,libgfortran,1,0
 user1,Portfolio,default,libiconv,1,0
+user1,Portfolio,default,liblapack,1,0
+user1,Portfolio,default,liblapacke,1,0
 user1,Portfolio,default,libopenblas,1,0
 user1,Portfolio,default,libpng,1,0
 user1,Portfolio,default,libsodium,1,0
@@ -265,6 +269,7 @@ user1,Portfolio,default,r-zoo,0,0
 user1,Portfolio,default,readline,1,0
 user1,Portfolio,default,ruamel.ordereddict,1,1
 user1,Portfolio,default,ruamel.yaml,1,1
+user1,Portfolio,default,ruamel.yaml.clib,1,1
 user1,Portfolio,default,scandir,1,0
 user1,Portfolio,default,scipy,1,0
 user1,Portfolio,default,send2trash,0,0
@@ -620,7 +625,9 @@ user1,ScriptsOnly,python,jbig,0,0
 user1,ScriptsOnly,python,jdcal,0,0
 user1,ScriptsOnly,python,jedi,0,0
 user1,ScriptsOnly,python,jinja2,0,0
+user1,ScriptsOnly,python,joblib,0,0
 user1,ScriptsOnly,python,jpeg,0,0
+user1,ScriptsOnly,python,json5,0,0
 user1,ScriptsOnly,python,jsonschema,0,0
 user1,ScriptsOnly,python,jupyter,0,0
 user1,ScriptsOnly,python,jupyter_client,0,0
@@ -647,6 +654,7 @@ user1,ScriptsOnly,python,libssh2,0,0
 user1,ScriptsOnly,python,libtiff,0,0
 user1,ScriptsOnly,python,libxml2,0,0
 user1,ScriptsOnly,python,libxslt,0,0
+user1,ScriptsOnly,python,llvm-openmp,0,0
 user1,ScriptsOnly,python,llvmlite,0,0
 user1,ScriptsOnly,python,locket,0,0
 user1,ScriptsOnly,python,lxml,0,0
@@ -660,6 +668,7 @@ user1,ScriptsOnly,python,mkl,0,0
 user1,ScriptsOnly,python,mkl-service,0,0
 user1,ScriptsOnly,python,mkl_fft,0,0
 user1,ScriptsOnly,python,mkl_random,0,0
+user1,ScriptsOnly,python,mock,0,0
 user1,ScriptsOnly,python,more-itertools,0,0
 user1,ScriptsOnly,python,mpc,0,0
 user1,ScriptsOnly,python,mpfr,0,0
@@ -759,6 +768,12 @@ user1,ScriptsOnly,python,sortedcontainers,0,0
 user1,ScriptsOnly,python,soupsieve,0,0
 user1,ScriptsOnly,python,sphinx,0,0
 user1,ScriptsOnly,python,sphinxcontrib,0,0
+user1,ScriptsOnly,python,sphinxcontrib-applehelp,0,0
+user1,ScriptsOnly,python,sphinxcontrib-devhelp,0,0
+user1,ScriptsOnly,python,sphinxcontrib-htmlhelp,0,0
+user1,ScriptsOnly,python,sphinxcontrib-jsmath,0,0
+user1,ScriptsOnly,python,sphinxcontrib-qthelp,0,0
+user1,ScriptsOnly,python,sphinxcontrib-serializinghtml,0,0
 user1,ScriptsOnly,python,sphinxcontrib-websupport,0,0
 user1,ScriptsOnly,python,spyder,0,0
 user1,ScriptsOnly,python,spyder-kernels,0,0
@@ -766,6 +781,7 @@ user1,ScriptsOnly,python,sqlalchemy,0,0
 user1,ScriptsOnly,python,sqlite,1,0
 user1,ScriptsOnly,python,statsmodels,0,0
 user1,ScriptsOnly,python,sympy,0,0
+user1,ScriptsOnly,python,tbb,0,0
 user1,ScriptsOnly,python,tblib,0,0
 user1,ScriptsOnly,python,terminado,0,0
 user1,ScriptsOnly,python,testpath,0,0
@@ -837,6 +853,8 @@ user2,ProjectInspector,default,jupyter_client,1,0
 user2,ProjectInspector,default,jupyter_core,1,0
 user2,ProjectInspector,default,krb5,1,0
 user2,ProjectInspector,default,ld64,1,0
+user2,ProjectInspector,default,libblas,1,0
+user2,ProjectInspector,default,libcblas,1,0
 user2,ProjectInspector,default,libcurl,1,0
 user2,ProjectInspector,default,libcxx,1,0
 user2,ProjectInspector,default,libcxxabi,1,0
@@ -844,6 +862,8 @@ user2,ProjectInspector,default,libedit,1,0
 user2,ProjectInspector,default,libffi,1,0
 user2,ProjectInspector,default,libgfortran,1,0
 user2,ProjectInspector,default,libiconv,1,0
+user2,ProjectInspector,default,liblapack,1,0
+user2,ProjectInspector,default,liblapacke,1,0
 user2,ProjectInspector,default,libopenblas,1,0
 user2,ProjectInspector,default,libpng,1,0
 user2,ProjectInspector,default,libsodium,1,0
@@ -887,8 +907,6 @@ user2,ProjectInspector,default,r-assertthat,1,0
 user2,ProjectInspector,default,r-base,1,1
 user2,ProjectInspector,default,r-base64enc,1,0
 user2,ProjectInspector,default,r-bh,1,0
-user2,ProjectInspector,default,r-bindr,1,0
-user2,ProjectInspector,default,r-bindrcpp,1,0
 user2,ProjectInspector,default,r-bit,1,0
 user2,ProjectInspector,default,r-bit64,1,0
 user2,ProjectInspector,default,r-blob,1,0
@@ -918,8 +936,6 @@ user2,ProjectInspector,default,r-rcpp,1,0
 user2,ProjectInspector,default,r-repr,1,0
 user2,ProjectInspector,default,r-rlang,1,0
 user2,ProjectInspector,default,r-rsqlite,1,0
-user2,ProjectInspector,default,r-stringi,1,0
-user2,ProjectInspector,default,r-stringr,1,0
 user2,ProjectInspector,default,r-tibble,1,0
 user2,ProjectInspector,default,r-tidyselect,1,0
 user2,ProjectInspector,default,r-utf8,1,0
@@ -1270,7 +1286,9 @@ user2,ScriptsOnly,python,jbig,0,0
 user2,ScriptsOnly,python,jdcal,0,0
 user2,ScriptsOnly,python,jedi,0,0
 user2,ScriptsOnly,python,jinja2,0,0
+user2,ScriptsOnly,python,joblib,0,0
 user2,ScriptsOnly,python,jpeg,0,0
+user2,ScriptsOnly,python,json5,0,0
 user2,ScriptsOnly,python,jsonschema,0,0
 user2,ScriptsOnly,python,jupyter,0,0
 user2,ScriptsOnly,python,jupyter_client,0,0
@@ -1297,6 +1315,7 @@ user2,ScriptsOnly,python,libssh2,0,0
 user2,ScriptsOnly,python,libtiff,0,0
 user2,ScriptsOnly,python,libxml2,0,0
 user2,ScriptsOnly,python,libxslt,0,0
+user2,ScriptsOnly,python,llvm-openmp,0,0
 user2,ScriptsOnly,python,llvmlite,0,0
 user2,ScriptsOnly,python,locket,0,0
 user2,ScriptsOnly,python,lxml,0,0
@@ -1310,6 +1329,7 @@ user2,ScriptsOnly,python,mkl,0,0
 user2,ScriptsOnly,python,mkl-service,0,0
 user2,ScriptsOnly,python,mkl_fft,0,0
 user2,ScriptsOnly,python,mkl_random,0,0
+user2,ScriptsOnly,python,mock,0,0
 user2,ScriptsOnly,python,more-itertools,0,0
 user2,ScriptsOnly,python,mpc,0,0
 user2,ScriptsOnly,python,mpfr,0,0
@@ -1409,6 +1429,12 @@ user2,ScriptsOnly,python,sortedcontainers,0,0
 user2,ScriptsOnly,python,soupsieve,0,0
 user2,ScriptsOnly,python,sphinx,0,0
 user2,ScriptsOnly,python,sphinxcontrib,0,0
+user2,ScriptsOnly,python,sphinxcontrib-applehelp,0,0
+user2,ScriptsOnly,python,sphinxcontrib-devhelp,0,0
+user2,ScriptsOnly,python,sphinxcontrib-htmlhelp,0,0
+user2,ScriptsOnly,python,sphinxcontrib-jsmath,0,0
+user2,ScriptsOnly,python,sphinxcontrib-qthelp,0,0
+user2,ScriptsOnly,python,sphinxcontrib-serializinghtml,0,0
 user2,ScriptsOnly,python,sphinxcontrib-websupport,0,0
 user2,ScriptsOnly,python,spyder,0,0
 user2,ScriptsOnly,python,spyder-kernels,0,0
@@ -1416,6 +1442,7 @@ user2,ScriptsOnly,python,sqlalchemy,0,0
 user2,ScriptsOnly,python,sqlite,1,0
 user2,ScriptsOnly,python,statsmodels,0,0
 user2,ScriptsOnly,python,sympy,0,0
+user2,ScriptsOnly,python,tbb,0,0
 user2,ScriptsOnly,python,tblib,0,0
 user2,ScriptsOnly,python,terminado,0,0
 user2,ScriptsOnly,python,testpath,0,0

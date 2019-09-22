@@ -35,11 +35,11 @@ def test_inventory_hierarchy(master_df):
 def test_user1_Portfolio(master_df):
     df = master_df[(master_df.owner == 'user1') & (master_df.project == 'Portfolio')]
     assert set(df.environment) == {'default'}
-    assert set(df.package[df.requested]) == {'bokeh', 'cvxopt', 'ipykernel', 'matplotlib',
-                                             'pandas', 'psutil', 'python', 'r-base',
-                                             'r-dplyr', 'r-ggplot2', 'r-irkernel', 'r-yaml',
-                                             'ruamel.ordereddict', 'ruamel.yaml',
-                                             'statsmodels', 'toolz', 'attrs'}
+    assert set(df.package[df.requested]).issuperset({'bokeh', 'cvxopt', 'ipykernel', 'matplotlib',
+                                                     'pandas', 'psutil', 'python', 'r-base',
+                                                     'r-dplyr', 'r-ggplot2', 'r-irkernel', 'r-yaml',
+                                                     'ruamel.ordereddict', 'ruamel.yaml',
+                                                     'statsmodels', 'toolz', 'attrs'})
     assert all(df.build[df.package.str.startswith('ruamel.')] == '<pip>')
     assert any(~df.requested & df.required)
     assert any(~df.requested & ~df.required)
@@ -84,7 +84,7 @@ def test_cli_nosummary(master_df):
     cmd = ['python', '-m', 'project_inspect', '--root', PROJECT_ROOT]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     outp, errp = proc.communicate()
-    assert '/user2/NoEnvs/cannot_read.py: CANNOT READ' in errp.decode()
+    assert 'user2/NoEnvs/cannot_read.py: CANNOT READ' in errp.decode()
     from io import BytesIO
     df = _read_csv(BytesIO(outp))
     assert df.equals(master_df)
@@ -95,7 +95,7 @@ def test_cli_filter(master_df):
     cmd = ['python', '-m', 'project_inspect', '--root', PROJECT_ROOT, '--package-file', fpath]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     outp, errp = proc.communicate()
-    assert '/user2/NoEnvs/cannot_read.py: CANNOT READ' in errp.decode()
+    assert 'user2/NoEnvs/cannot_read.py: CANNOT READ' in errp.decode()
     from io import BytesIO
     df = _read_csv(BytesIO(outp))
     filtered_df = master_df[(master_df.package=='xlrd')|(master_df.package=='pytest')].reset_index(drop=True)

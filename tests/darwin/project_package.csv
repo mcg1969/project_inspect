@@ -60,6 +60,8 @@ user1,Portfolio,jupyter_core,1,1,0
 user1,Portfolio,kiwisolver,1,1,0
 user1,Portfolio,krb5,1,1,0
 user1,Portfolio,ld64,1,1,0
+user1,Portfolio,libblas,1,1,0
+user1,Portfolio,libcblas,1,1,0
 user1,Portfolio,libcurl,1,1,0
 user1,Portfolio,libcxx,1,1,0
 user1,Portfolio,libcxxabi,1,1,0
@@ -67,6 +69,8 @@ user1,Portfolio,libedit,1,1,0
 user1,Portfolio,libffi,1,1,0
 user1,Portfolio,libgfortran,1,1,0
 user1,Portfolio,libiconv,1,1,0
+user1,Portfolio,liblapack,1,1,0
+user1,Portfolio,liblapacke,1,1,0
 user1,Portfolio,libopenblas,1,1,0
 user1,Portfolio,libpng,1,1,0
 user1,Portfolio,libsodium,1,1,0
@@ -265,6 +269,7 @@ user1,Portfolio,r-zoo,1,0,0
 user1,Portfolio,readline,1,1,0
 user1,Portfolio,ruamel.ordereddict,1,1,1
 user1,Portfolio,ruamel.yaml,1,1,1
+user1,Portfolio,ruamel.yaml.clib,1,1,1
 user1,Portfolio,scandir,1,1,0
 user1,Portfolio,scipy,1,1,0
 user1,Portfolio,send2trash,1,0,0
@@ -391,7 +396,9 @@ user1,ScriptsOnly,jbig,1,0,0
 user1,ScriptsOnly,jdcal,1,0,0
 user1,ScriptsOnly,jedi,2,0,0
 user1,ScriptsOnly,jinja2,2,0,0
+user1,ScriptsOnly,joblib,1,0,0
 user1,ScriptsOnly,jpeg,2,1,0
+user1,ScriptsOnly,json5,1,0,0
 user1,ScriptsOnly,jsonschema,2,0,0
 user1,ScriptsOnly,jupyter,1,0,0
 user1,ScriptsOnly,jupyter_client,2,0,0
@@ -422,7 +429,7 @@ user1,ScriptsOnly,libxml2,2,1,0
 user1,ScriptsOnly,libxslt,1,0,0
 user1,ScriptsOnly,llvm,1,1,0
 user1,ScriptsOnly,llvm-lto-tapi,1,1,0
-user1,ScriptsOnly,llvm-openmp,1,1,0
+user1,ScriptsOnly,llvm-openmp,2,1,0
 user1,ScriptsOnly,llvmlite,1,0,0
 user1,ScriptsOnly,locket,1,0,0
 user1,ScriptsOnly,lxml,1,0,0
@@ -437,6 +444,7 @@ user1,ScriptsOnly,mkl,1,0,0
 user1,ScriptsOnly,mkl-service,1,0,0
 user1,ScriptsOnly,mkl_fft,1,0,0
 user1,ScriptsOnly,mkl_random,1,0,0
+user1,ScriptsOnly,mock,1,0,0
 user1,ScriptsOnly,more-itertools,1,0,0
 user1,ScriptsOnly,mpc,1,0,0
 user1,ScriptsOnly,mpfr,1,0,0
@@ -682,6 +690,12 @@ user1,ScriptsOnly,sortedcontainers,1,0,0
 user1,ScriptsOnly,soupsieve,1,0,0
 user1,ScriptsOnly,sphinx,1,0,0
 user1,ScriptsOnly,sphinxcontrib,1,0,0
+user1,ScriptsOnly,sphinxcontrib-applehelp,1,0,0
+user1,ScriptsOnly,sphinxcontrib-devhelp,1,0,0
+user1,ScriptsOnly,sphinxcontrib-htmlhelp,1,0,0
+user1,ScriptsOnly,sphinxcontrib-jsmath,1,0,0
+user1,ScriptsOnly,sphinxcontrib-qthelp,1,0,0
+user1,ScriptsOnly,sphinxcontrib-serializinghtml,1,0,0
 user1,ScriptsOnly,sphinxcontrib-websupport,1,0,0
 user1,ScriptsOnly,spyder,1,0,0
 user1,ScriptsOnly,spyder-kernels,1,0,0
@@ -689,6 +703,7 @@ user1,ScriptsOnly,sqlalchemy,1,0,0
 user1,ScriptsOnly,sqlite,2,2,0
 user1,ScriptsOnly,statsmodels,1,0,0
 user1,ScriptsOnly,sympy,1,0,0
+user1,ScriptsOnly,tbb,1,0,0
 user1,ScriptsOnly,tblib,1,0,0
 user1,ScriptsOnly,terminado,2,0,0
 user1,ScriptsOnly,testpath,2,0,0
@@ -761,6 +776,8 @@ user2,ProjectInspector,jupyter_client,1,1,0
 user2,ProjectInspector,jupyter_core,1,1,0
 user2,ProjectInspector,krb5,1,1,0
 user2,ProjectInspector,ld64,1,1,0
+user2,ProjectInspector,libblas,1,1,0
+user2,ProjectInspector,libcblas,1,1,0
 user2,ProjectInspector,libcurl,1,1,0
 user2,ProjectInspector,libcxx,1,1,0
 user2,ProjectInspector,libcxxabi,1,1,0
@@ -768,6 +785,8 @@ user2,ProjectInspector,libedit,1,1,0
 user2,ProjectInspector,libffi,1,1,0
 user2,ProjectInspector,libgfortran,1,1,0
 user2,ProjectInspector,libiconv,1,1,0
+user2,ProjectInspector,liblapack,1,1,0
+user2,ProjectInspector,liblapacke,1,1,0
 user2,ProjectInspector,libopenblas,1,1,0
 user2,ProjectInspector,libpng,1,1,0
 user2,ProjectInspector,libsodium,1,1,0
@@ -811,8 +830,6 @@ user2,ProjectInspector,r-assertthat,1,1,0
 user2,ProjectInspector,r-base,1,1,1
 user2,ProjectInspector,r-base64enc,1,1,0
 user2,ProjectInspector,r-bh,1,1,0
-user2,ProjectInspector,r-bindr,1,1,0
-user2,ProjectInspector,r-bindrcpp,1,1,0
 user2,ProjectInspector,r-bit,1,1,0
 user2,ProjectInspector,r-bit64,1,1,0
 user2,ProjectInspector,r-blob,1,1,0
@@ -842,8 +859,6 @@ user2,ProjectInspector,r-rcpp,1,1,0
 user2,ProjectInspector,r-repr,1,1,0
 user2,ProjectInspector,r-rlang,1,1,0
 user2,ProjectInspector,r-rsqlite,1,1,0
-user2,ProjectInspector,r-stringi,1,1,0
-user2,ProjectInspector,r-stringr,1,1,0
 user2,ProjectInspector,r-tibble,1,1,0
 user2,ProjectInspector,r-tidyselect,1,1,0
 user2,ProjectInspector,r-utf8,1,1,0
@@ -965,7 +980,9 @@ user2,ScriptsOnly,jbig,1,0,0
 user2,ScriptsOnly,jdcal,1,0,0
 user2,ScriptsOnly,jedi,2,0,0
 user2,ScriptsOnly,jinja2,2,0,0
+user2,ScriptsOnly,joblib,1,0,0
 user2,ScriptsOnly,jpeg,2,1,0
+user2,ScriptsOnly,json5,1,0,0
 user2,ScriptsOnly,jsonschema,2,0,0
 user2,ScriptsOnly,jupyter,1,0,0
 user2,ScriptsOnly,jupyter_client,2,0,0
@@ -996,7 +1013,7 @@ user2,ScriptsOnly,libxml2,2,1,0
 user2,ScriptsOnly,libxslt,1,0,0
 user2,ScriptsOnly,llvm,1,1,0
 user2,ScriptsOnly,llvm-lto-tapi,1,1,0
-user2,ScriptsOnly,llvm-openmp,1,1,0
+user2,ScriptsOnly,llvm-openmp,2,1,0
 user2,ScriptsOnly,llvmlite,1,0,0
 user2,ScriptsOnly,locket,1,0,0
 user2,ScriptsOnly,lxml,1,0,0
@@ -1011,6 +1028,7 @@ user2,ScriptsOnly,mkl,1,0,0
 user2,ScriptsOnly,mkl-service,1,0,0
 user2,ScriptsOnly,mkl_fft,1,0,0
 user2,ScriptsOnly,mkl_random,1,0,0
+user2,ScriptsOnly,mock,1,0,0
 user2,ScriptsOnly,more-itertools,1,0,0
 user2,ScriptsOnly,mpc,1,0,0
 user2,ScriptsOnly,mpfr,1,0,0
@@ -1256,6 +1274,12 @@ user2,ScriptsOnly,sortedcontainers,1,0,0
 user2,ScriptsOnly,soupsieve,1,0,0
 user2,ScriptsOnly,sphinx,1,0,0
 user2,ScriptsOnly,sphinxcontrib,1,0,0
+user2,ScriptsOnly,sphinxcontrib-applehelp,1,0,0
+user2,ScriptsOnly,sphinxcontrib-devhelp,1,0,0
+user2,ScriptsOnly,sphinxcontrib-htmlhelp,1,0,0
+user2,ScriptsOnly,sphinxcontrib-jsmath,1,0,0
+user2,ScriptsOnly,sphinxcontrib-qthelp,1,0,0
+user2,ScriptsOnly,sphinxcontrib-serializinghtml,1,0,0
 user2,ScriptsOnly,sphinxcontrib-websupport,1,0,0
 user2,ScriptsOnly,spyder,1,0,0
 user2,ScriptsOnly,spyder-kernels,1,0,0
@@ -1263,6 +1287,7 @@ user2,ScriptsOnly,sqlalchemy,1,0,0
 user2,ScriptsOnly,sqlite,2,2,0
 user2,ScriptsOnly,statsmodels,1,0,0
 user2,ScriptsOnly,sympy,1,0,0
+user2,ScriptsOnly,tbb,1,0,0
 user2,ScriptsOnly,tblib,1,0,0
 user2,ScriptsOnly,terminado,2,0,0
 user2,ScriptsOnly,testpath,2,0,0

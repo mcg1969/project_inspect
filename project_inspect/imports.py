@@ -111,7 +111,7 @@ def strip_python_magic(cell):
 def find_notebook_imports(ndata):
     try:
         language = ndata['metadata']['kernelspec']['language'].lower()
-    except KeyError:
+    except (KeyError, TypeError):
         language = 'unknown'
     modules = set()
     if language in ('python', 'r'):

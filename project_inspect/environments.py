@@ -10,7 +10,7 @@ from glob import glob, iglob
 
 from . import config
 from .imports import find_python_imports, find_r_imports, find_file_imports
-from .utils import load_file
+from .utils import load_file, shortpath
 
 import logging
 import pkg_resources
@@ -226,16 +226,11 @@ def get_local_packages(path):
         pdata['modules']['python'].add(module)
         pdata['imports']['python'].update(imports)
     for fpath in glob(join(path, '*.R')) + glob(join(path, '*.ipynb')):
-        if not basename(fpath).startswith('.'):
-            bname = './' + basename(fpath)
-            pdata = _create(bname)
-            imports, language = find_file_imports(fpath, submodules=True)
-            if language in pdata['imports']:
-                pdata['imports'][language] = imports
-            elif language == 'unknown':
-                logger.warning('Potentially corrupt file: {}'.format(fpath))
-            else:
-                logger.warning('Unsupported language {}: {}'.format(language, fpath))
+        bname = './' + basename(fpath)
+        pdata = _create(bname)
+        imports, language = find_file_imports(fpath, submodules=True)
+        if language in pdata['imports']:
+            pdata['imports'][language] = imports
     return packages
 
 

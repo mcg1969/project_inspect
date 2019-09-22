@@ -2,8 +2,12 @@ import logging
 import functools
 import json
 import os
+import traceback
 
 from . import config
+
+from textwrap import TextWrapper
+
 
 logger = logging.getLogger(__name__.rsplit('.', 1)[0])
 
@@ -34,21 +38,40 @@ def shortpath(fpath):
     return fpath
 
 
+from textwrap import TextWrapper
+wrapper = TextWrapper()
+wrapper.initial_indent = '    '
+wrapper.subsequent_indent = '      '
+def wrap(t):
+    return '\n'.join(wrapper.wrap(t))
+
+def warn_file(fpath, msg, exc=None):
+    if exc is not None:
+        msg = msg + '\n' + wrap(str(exc))
+    logger.warning('{}: {}'.format(shortpath(fpath), msg))
+
+
+last_path = None
+
+
 @functools.lru_cache()
 def load_file(fpath):
+    global last_path
     try:
         with open(fpath, 'rb') as fp:
             ndata = fp.read()
     except (IOError, OSError):
-        logger.error('{}: CANNOT READ'.format(fpath))
+        logger.error('{}: CANNOT READ'.format(shortpath(fpath)))
         return None
     if fpath.endswith(('.ipynb', '.json')):
         try:
             result = json.loads(ndata)
         except:
-            logger.error('{}: INVALID JSON'.format(fpath))
+            if last_path != fpath:
+                logger.error('{}: INVALID JSON'.format(shortpath(fpath)))
+                last_path = fpath
             return None
     else:
         result = ndata.decode("utf-8", "replace")
-    logger.debug('        {}'.format(shortpath(fpath)))
+    logger.debug('{}: loaded'.format(shortpath(fpath)))
     return result
