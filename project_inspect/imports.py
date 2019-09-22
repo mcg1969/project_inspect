@@ -112,20 +112,19 @@ def find_notebook_imports(ndata):
     try:
         language = ndata['metadata']['kernelspec']['language'].lower()
     except KeyError:
-        return set(), 'python'
-    if language not in ('python', 'r'):
-        raise RuntimeError('Unsupported language: {}'.format(language))
+        language = 'unknown'
     modules = set()
-    modules.add('ipykernel' if language == 'python' else 'IRkernel')
-    for cell in ndata['cells']:
-        if cell['cell_type'] == 'code':
-            if language == 'python':
-                source = '\n'.join(strip_python_magic(cell['source']))
-                processor = find_python_imports
-            elif language == 'r':
-                source = '\n'.join(cell['source'])
-                processor = find_r_imports
-            modules.update(processor(source))
+    if language in ('python', 'r'):
+        modules.add('ipykernel' if language == 'python' else 'IRkernel')
+        for cell in ndata['cells']:
+            if cell['cell_type'] == 'code':
+                if language == 'python':
+                    source = '\n'.join(strip_python_magic(cell['source']))
+                    processor = find_python_imports
+                elif language == 'r':
+                    source = '\n'.join(cell['source'])
+                    processor = find_r_imports
+                modules.update(processor(source))
     return modules, language
 
 

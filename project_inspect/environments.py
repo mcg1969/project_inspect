@@ -232,6 +232,10 @@ def get_local_packages(path):
             imports, language = find_file_imports(fpath, submodules=True)
             if language in pdata['imports']:
                 pdata['imports'][language] = imports
+            elif language == 'unknown':
+                logger.warning('Potentially corrupt file: {}'.format(fpath))
+            else:
+                logger.warning('Unsupported language {}: {}'.format(language, fpath))
     return packages
 
 
