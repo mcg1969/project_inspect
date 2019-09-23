@@ -1,20 +1,13 @@
 import re
-import os
-import json
-import functools
 
-from glob import glob, iglob
-from os.path import join, basename, dirname, exists, isfile
+from os.path import isfile
 
 from lib2to3 import pygram
 from lib2to3 import pytree
-from lib2to3.pgen2 import driver, parse, token
-from lib2to3.pgen2.parse import ParseError
-from lib2to3.pgen2.tokenize import TokenError
+from lib2to3.pgen2 import driver
 from lib2to3.pygram import python_symbols as syms
-from lib2to3.pytree import Leaf, Node
 
-from .utils import load_file, set_log_root, shortpath
+from .utils import load_file
 
 
 def stringify(content):
@@ -39,7 +32,7 @@ def yield_imports(node):
         base = stringify(node.children[1:right])
         if not base.endswith('.'):
             base += '.'
-        node = node.children[right+1]
+        node = node.children[right + 1]
     elif node.type == syms.import_name:
         # import a, b as c
         base = ''
@@ -55,7 +48,7 @@ def yield_imports(node):
     else:
         yield base + stringify(node)
 
-                
+
 p3_grammar = pygram.python_grammar_no_print_statement
 p3_driver = driver.Driver(p3_grammar, convert=pytree.convert)
 p2_grammar = pygram.python_grammar
@@ -68,11 +61,11 @@ def find_python_imports(code, recurse=True):
     try:
         tree = p3_driver.parse_string(code, debug=False)
         imports.update(yield_imports(tree))
-    except:
+    except Exception:
         try:
             tree = p2_driver.parse_string(code, debug=False)
             imports.update(yield_imports(tree))
-        except:
+        except Exception:
             if recurse:
                 for line in map(str.strip, code.splitlines()):
                     if line and not line.startswith('#'):
@@ -111,21 +104,20 @@ def strip_python_magic(cell):
 def find_notebook_imports(ndata):
     try:
         language = ndata['metadata']['kernelspec']['language'].lower()
-    except KeyError:
-        return set(), 'python'
-    if language not in ('python', 'r'):
-        raise RuntimeError('Unsupported language: {}'.format(language))
+    except (KeyError, TypeError):
+        language = 'unknown'
     modules = set()
-    modules.add('ipykernel' if language == 'python' else 'IRkernel')
-    for cell in ndata['cells']:
-        if cell['cell_type'] == 'code':
-            if language == 'python':
-                source = '\n'.join(strip_python_magic(cell['source']))
-                processor = find_python_imports
-            elif language == 'r':
-                source = '\n'.join(cell['source'])
-                processor = find_r_imports
-            modules.update(processor(source))
+    if language in ('python', 'r'):
+        modules.add('ipykernel' if language == 'python' else 'IRkernel')
+        for cell in ndata['cells']:
+            if cell['cell_type'] == 'code':
+                if language == 'python':
+                    source = '\n'.join(strip_python_magic(cell['source']))
+                    processor = find_python_imports
+                elif language == 'r':
+                    source = '\n'.join(cell['source'])
+                    processor = find_r_imports
+                modules.update(processor(source))
     return modules, language
 
 
@@ -134,12 +126,12 @@ def find_file_imports(fpath, submodules=False, locals=False):
         return set(), None
     data = load_file(fpath)
     if data is None:
-    	return set(), None
+        return set(), None
     elif fpath.endswith('.ipynb'):
         imports, language = find_notebook_imports(data)
     elif fpath.endswith('.py'):
         imports, language = find_python_imports(data), 'python'
-    else: # .R
+    else:  # .R
         imports, language = find_r_imports(data), 'r'
     if language == 'python':
         if not submodules:
@@ -147,4 +139,3 @@ def find_file_imports(fpath, submodules=False, locals=False):
         if not locals:
             imports = set(imp for imp in imports if not imp.startswith('.'))
     return imports, language
-

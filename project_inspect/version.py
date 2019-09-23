@@ -276,8 +276,8 @@ class VersionOrder(object, metaclass=SingleStrArgCachingType):
                             # str < int
                             return True
                     elif isinstance(c2, string_types):
-                            # not (int < str)
-                            return False
+                        # not (int < str)
+                        return False
                     # c1 and c2 have the same type
                     return c1 < c2
         # self == other
@@ -339,7 +339,7 @@ def treeify(spec_str):
             r = r[1:] if r[0] == c else (r,)
             left = output.pop()
             left = left[1:] if left[0] == c else (left,)
-            output.append((c,)+left+r)
+            output.append((c,) + left + r)
 
     for item in tokens:
         item = item.strip()
@@ -410,6 +410,7 @@ OPERATOR_MAP = {
     "~=": compatible_release_operator,
 }
 OPERATOR_START = frozenset(('=', '<', '>', '!', '~'))
+
 
 class BaseSpec(object):
 
@@ -564,4 +565,3 @@ class VersionSpec(BaseSpec, metaclass=SingleStrArgCachingType):
     def merge(self, other):
         assert isinstance(other, self.__class__)
         return self.__class__('%s,%s' % (self.raw_value, other.raw_value))
-

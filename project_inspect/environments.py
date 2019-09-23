@@ -5,12 +5,12 @@ import json
 import re
 import os
 
-from os.path import basename, dirname, join, exists, isfile, isdir, abspath
-from glob import glob, iglob
+from os.path import basename, dirname, join, exists, isfile, isdir
+from glob import glob
 
 from . import config
-from .imports import find_python_imports, find_r_imports, find_file_imports
-from .utils import load_file
+from .imports import find_file_imports
+from .utils import load_file, warn_file
 
 import logging
 import pkg_resources
@@ -22,12 +22,12 @@ __all__ = ['environment_by_prefix', 'kernel_name_to_prefix']
 def get_python_builtins(pybin):
     '''
     Determines the python modules that have been compiled into the Python executable.
-    
+
     Attempts to run the executable and dump sys.builtin_module_names. If this is not
     possible, simply returns a set containing sys.builtin_module_names for the current
     executable. This is a sufficiently close approximation of what we need, so just
     a warning is raised, and execution proceeds.
-    
+
     Args:
         pybin (str): path to a valid Python executable.
     Returns:
@@ -105,7 +105,7 @@ def parse_conda_meta(mpath):
 def get_eggs(sp_dir):
     '''
     Returns a list of all egg files/directories in the given site-packages directory.
-    
+
     Args:
         sp_dir (str): the site packages directory to scan
     Returns:
@@ -120,7 +120,7 @@ def get_eggs(sp_dir):
         try:
             dists = list(factory(fullpath))
         except Exception as e:
-            logger.warning('Error reading eggs in {}:\n{}'.format(fullpath, e))
+            warn_file(fullpath, 'ERROR READING EGGS', e)
             dists = []
         pdata = {'name': None,
                  'version': None,
@@ -139,18 +139,17 @@ def get_eggs(sp_dir):
                     sources = list(map(str.strip, dist.get_metadata(sources).splitlines()))
                     top_level = list(map(str.strip, dist.get_metadata('top_level.txt').splitlines()))
                     for top in top_level:
-                        top_s = top + '/'
                         for src in sources:
-                                src = src.split(',', 1)[0]
-                                if src.endswith('__init__.py'):
-                                    src = dirname(src)
-                                elif src.endswith(('.py', '.so')):
-                                    src = src[:-3]
-                                else:
-                                    continue
-                                pdata['modules']['python'].add(src.replace('/', '.'))
+                            src = src.split(',', 1)[0]
+                            if src.endswith('__init__.py'):
+                                src = dirname(src)
+                            elif src.endswith(('.py', '.so')):
+                                src = src[:-3]
+                            else:
+                                continue
+                            pdata['modules']['python'].add(src.replace('/', '.'))
             except Exception as e:
-                logger.warning('Unexpected error processing {}:\n{}'.format(fn, str(e)))
+                warn_file(fn, 'UNEXPECTED ERROR', e)
         if not pdata['name']:
             name, version = fn.rsplit('.', 1)[0], '<dev>'
             if fn.endswith('.dist-info'):
@@ -181,8 +180,8 @@ def get_python_importables(path, level=0):
         level -= 1
     root_len = len(root_path) + 1
     for root, dirs, files in gen:
-        dirs[:] = [d for d in dirs if not d.startswith('.')
-                   and exists(join(root, d, '__init__.py'))]
+        dirs[:] = [d for d in dirs if not d.startswith('.') and
+                   exists(join(root, d, '__init__.py'))]
         base_module = root[root_len:].replace('/', '.')
         for file in files:
             if file.startswith('.'):
@@ -201,6 +200,7 @@ def get_python_importables(path, level=0):
 @functools.lru_cache()
 def get_local_packages(path):
     packages = {}
+
     def _create(bname):
         if bname not in packages:
             packages[bname] = {'name': bname,
@@ -226,12 +226,11 @@ def get_local_packages(path):
         pdata['modules']['python'].add(module)
         pdata['imports']['python'].update(imports)
     for fpath in glob(join(path, '*.R')) + glob(join(path, '*.ipynb')):
-        if not basename(fpath).startswith('.'):
-            bname = './' + basename(fpath)
-            pdata = _create(bname)
-            imports, language = find_file_imports(fpath, submodules=True)
-            if language in pdata['imports']:
-                pdata['imports'][language] = imports
+        bname = './' + basename(fpath)
+        pdata = _create(bname)
+        imports, language = find_file_imports(fpath, submodules=True)
+        if language in pdata['imports']:
+            pdata['imports'][language] = imports
     return packages
 
 
@@ -261,8 +260,7 @@ def environment_by_prefix(envdir, local=None):
                     if dep is not None:
                         depends.add(dep)
         return envdata
-    
-    envname = basename(envdir)
+
     envdata = {'prefix': envdir}
     imports = envdata['imports'] = {'python': {}, 'r': {}}
     packages = envdata['packages'] = {}
@@ -316,8 +314,8 @@ def kernel_name_to_prefix(project_home, kernel_name):
         kernel_base = 'conda-env-{}-'.format(project_name)
         if kernel_loc.startswith(kernel_base):
             return join(project_home, 'envs', kernel_loc[len(kernel_base):])
-    
-    
+
+
 def modules_to_packages(environment, modules, language):
     requested = set()
     missing = set()
